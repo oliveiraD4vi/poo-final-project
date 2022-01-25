@@ -2,6 +2,7 @@ package Tenancy;
 
 import Date.Date;
 import Vehicles.*;
+import Persons.Client;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -9,13 +10,19 @@ public class Tenancy {
   private int id;
   private Date rentDate;
   private Date devolutionDate;
-  private String client;
+  private Client client;
   private boolean status;
   private List<Car> cars = new ArrayList<Car>();
   private List<Motorcycle> motorcycles = new ArrayList<Motorcycle>();
 
-  Tenancy() {
-
+  Tenancy(int id, Date rentDate, Date devolutionDate, Client client, List<Car> cars, List<Motorcycle> motorcycles) {
+    this.id = id;
+    this.rentDate = rentDate;
+    this.devolutionDate = devolutionDate;
+    this.client = client;
+    this.cars = cars;
+    this.motorcycles = motorcycles;
+    this.status = true;
   }
 
   public float calculateFine() {
@@ -46,7 +53,7 @@ public class Tenancy {
     return devolutionDate;
   }
 
-  public String getClient() {
+  public Client getClient() {
     return client;
   }
 

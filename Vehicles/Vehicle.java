@@ -140,11 +140,8 @@ abstract public class Vehicle {
     StringBuffer stringBuffer = new StringBuffer();
 
     stringBuffer.append(getType() + "\n");
-    stringBuffer.append("ID: " + getId() + "\n");
-    stringBuffer.append("Placa: " + getPlate() + "\n");
-    stringBuffer.append(
-      getBrand() + " - " + getModel() + ", " + getColor() + "\n"
-    );
+    stringBuffer.append("ID: " + getId() + " | " + getPlate().toUpperCase() + "\n");
+    stringBuffer.append(getBrand() + " - " + getModel() + ", " + getColor() + "\n");
 
     return stringBuffer.toString();
   }

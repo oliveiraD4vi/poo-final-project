@@ -31,12 +31,10 @@ public class Person {
 
   public String toString() {
     return (
-      "[" 
-        + getName() + ", "
-        + getCPF() + ", "
-        + getEmail() + ", "
-        + getPhone() +
-      "]"
+      getName() + " | "
+      + getCPF() + "\n"
+      + getEmail() + " | "
+      + getPhone()
     );
   }
 }

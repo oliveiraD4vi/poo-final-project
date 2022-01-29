@@ -25,4 +25,26 @@ public class RentalCompany {
         }
     }
 
+    public void addCars(Car car){
+        disponibleCarList.add(car);
+    }
+
+    public void removeCar(Car car){
+        boolean test = disponibleCarList.remove(car);
+        if(test == false){
+            System.out.println("fail: carro não presente");
+        }
+
+    }
+
+    public void addMotorcycle(Motorcycle moto){
+        disponiblMotorcycle.add(moto);
+    }
+
+    public void removeMotorcycle(Motorcycle moto){
+        boolean test = disponiblMotorcycle.remove(moto);
+        if(test == false){
+            System.out.println("fail: moto não presente");
+        }
+    }
 }

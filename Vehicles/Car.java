@@ -22,7 +22,7 @@ public class Car extends Vehicle {
    * @param color é a cor do carro
    * @param plate é a placa do carro
    */
-  Car (int id, String brand, String model, String color, String plate) {
+  public Car (int id, String brand, String model, String color, String plate) {
     super(id, brand, model, color, plate);
     setType('C');
     setBasePrice((float)18.5);

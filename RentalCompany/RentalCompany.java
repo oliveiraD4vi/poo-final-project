@@ -7,7 +7,6 @@ import Persons.Client;
 import Tenancy.Tenancy;
 import Vehicles.Car;
 import Vehicles.Motorcycle;
-import Vehicles.Vehicle;
 
 //classe locadora
 public class RentalCompany {
@@ -190,7 +189,9 @@ public class RentalCompany {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if(id >= 0){
+            this.id = id;
+        }
     }
 
     public void setClientsList(ArrayList<Client> clientsList) {

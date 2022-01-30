@@ -35,7 +35,7 @@ public class Tenancy {
    * @param cars é a lista de carros
    * @param motorcycles é a lista de motos
    */
-  Tenancy(int id, Date rentDate, Date devolutionDate, Client client, List<Car> cars, List<Motorcycle> motorcycles) {
+  public Tenancy(int id, Date rentDate, Date devolutionDate, Client client, List<Car> cars, List<Motorcycle> motorcycles) {
     this.id = id;
     this.rentDate = rentDate;
     this.devolutionDate = devolutionDate;
@@ -108,6 +108,10 @@ public class Tenancy {
    */
   public void setStatus(boolean value) {
     this.status = value;
+  }
+
+  public void setDevolutionDate(Date devolutionDate) {
+      this.devolutionDate = devolutionDate;
   }
 
   /**

@@ -1,204 +1,204 @@
 package RentalCompany;
 
-import java.util.ArrayList;
-
+import java.util.*;
 import Date.Date;
-import Persons.Client;
+import Persons.*;
 import Tenancy.Tenancy;
 import Vehicles.Car;
 import Vehicles.Motorcycle;
 
 //classe locadora
 public class RentalCompany {
-    private int id;
-    private String managerName;
-    private ArrayList<Car> disponibleCarList = new ArrayList<Car>();
-    private ArrayList<Motorcycle> disponiblMotorcycle = new ArrayList<Motorcycle>();
-    private ArrayList<Tenancy> tenanciesList = new ArrayList<Tenancy>();
-    private ArrayList<Client> clientsList = new ArrayList<Client>();
-    private int idRetal;
-    private String address;
+  private int id;
+  private int idRental;
+  private String address;
+  private Manager manager;
+  private List<Car> disponibleCarList = new ArrayList<Car>();
+  private List<Motorcycle> disponibleMotorcycle = new ArrayList<Motorcycle>();
+  private List<Tenancy> tenanciesList = new ArrayList<Tenancy>();
+  private List<Client> clientsList = new ArrayList<Client>();
 
-    public RentalCompany(int id, String manegerName, String address){
-        if(id >= 0){
-            this.id = id;
-            this.managerName = manegerName;
-            this.address = address;
-        }else{
-            System.out.println("fail: dados invalidos");
+  public RentalCompany(int id, Manager manager, String address){
+    if (id >= 0){
+      this.id = id;
+      this.manager = manager;
+      this.address = address;
+    } else {
+      System.out.println("fail: dados invalidos");
+    }
+  }
+
+  public void addCars(Car car){
+    disponibleCarList.add(car);
+  }
+
+  public boolean removeCar(Car car){
+    boolean test = disponibleCarList.remove(car);
+    
+    if (test == false)
+      System.out.println("fail: carro não presente");
+    
+    return test;
+  }
+
+  public void addMotorcycle(Motorcycle moto){
+    disponibleMotorcycle.add(moto);
+  }
+
+  public boolean removeMotorcycle(Motorcycle moto){
+    boolean test = disponibleMotorcycle.remove(moto);
+    
+    if (test == false)
+      System.out.println("fail: moto não presente");
+
+    return test;
+  }
+
+  public boolean rentVehicle(ArrayList<Car> cars, ArrayList<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
+    ArrayList<Car> carros = new ArrayList<Car>();
+    ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
+    boolean testeGeral = false;
+
+    if ((cars.size()+motos.size()) > 2) {
+      System.out.println("Locação inválida: quantidade excessiva de véiculos!");
+      return false;
+    } else {
+      for(int i = 0; i < 2; i++){
+        Car car = cars.get(i);
+        Motorcycle moto = motos.get(i);
+        boolean teste = false;
+        if (car != null) teste = removeCar(car);
+
+        if (teste == true) {
+          carros.add(car);
+          testeGeral = true;
         }
-    }
-
-    public void addCars(Car car){
-        disponibleCarList.add(car);
-    }
-
-    public boolean removeCar(Car car){
-        boolean test = disponibleCarList.remove(car);
-        if(test == false){
-            System.out.println("fail: carro não presente");
+        
+        teste = false;
+        
+        if (moto != null) teste = removeMotorcycle(moto);
+        
+        if (teste == true) {
+          motosDis.add(moto);
+          testeGeral = true;
         }
-        return test;
+      }
+
+      if(testeGeral == false) return false;
+
+      Tenancy aux = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
+      idRental++;
+      tenanciesList.add(aux);
+      clientsList.add(cliente);
+      return true;
+    } 
+  }   
+
+  public void showCars(){
+    System.out.println("Carros: \n");
+
+    if (disponibleCarList.size() == 0) System.out.println("Não há carros disponíveis!");
+    else {
+      for(int i = 0; i < disponibleCarList.size(); i++) {
+        System.out.println(disponibleCarList.get(i));
+        System.out.println("==============================");
+      }
+    }
+  }
+  public void showMotorcycle(){
+    System.out.println("Motos: \n");
+
+    if (disponibleMotorcycle.size() == 0) System.out.println("Não há motos disponíveis!");
+    else {
+      for(int i = 0; i < disponibleMotorcycle.size(); i++) {
+        System.out.println(disponibleMotorcycle.get(i));
+        System.out.println("==============================");
+      }
+    }
+  }
+
+  public void showTenancies(){
+    System.out.println("Alocações: \n");
+
+    if (tenanciesList.size() == 0) System.out.println("Não há locações registradas!");
+    else {
+      for(int i = 0; i < tenanciesList.size(); i++) {
+        System.out.println(tenanciesList.get(i));
+        System.out.println("==============================");
+      }
+    }
+  }
+  public void showClientsList(){
+    System.out.println("Clientes: \n");
+
+    if (tenanciesList.size() == 0) System.out.println("Sem Clientes.");
+    else {
+      for(int i = 0; i < clientsList.size(); i++) {
+        System.out.println(clientsList.get(i));
+        System.out.println("==============================");
+      }
+    }
+  }
+
+  public boolean endTenancie(Tenancy tenancy, Date date){
+    boolean teste = tenanciesList.remove(tenancy);
+
+    if (teste) {
+      float multa = tenancy.calculateFine(date);
+      float valor = tenancy.calculateRentValue();
+      valor += multa;
+      System.out.printf("Total a pagar pelo aluguel $%f.2", valor);
+      return true;
+    } else {
+      System.out.println("Locação não encontrada");
+      return false;
+    }
+  }
+
+  public Date changeDate(Tenancy tenancy, Date date){
+    boolean teste = tenanciesList.remove(tenancy);
+
+    if (teste) {
+      tenancy.setDevolutionDate(date);
+      tenanciesList.add(tenancy);
     }
 
-    public void addMotorcycle(Motorcycle moto){
-        disponiblMotorcycle.add(moto);
-    }
+    return date;
+  }
 
-    public boolean removeMotorcycle(Motorcycle moto){
-        boolean test = disponiblMotorcycle.remove(moto);
-        if(test == false){
-            System.out.println("fail: moto não presente");
-        }
-        return test;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public boolean rentVehicle(ArrayList<Car> cars, ArrayList<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
-        ArrayList<Car> carros = new ArrayList<Car>();
-        ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
-        boolean testeGeral = false;
-        if((cars.size()+motos.size()) > 2){
-            return false;
-        }else{
-            for(int i = 0; i < 2; i++){
-                Car car = cars.get(i);
-                Motorcycle moto = motos.get(i);
-                boolean teste = false;
-                if(car != null){
-                    teste = removeCar(car);
-                }
-                if(teste == true){
-                    carros.add(car);
-                    testeGeral = true;
-                }
-                teste = false;
-                if(moto != null){
-                    teste = removeMotorcycle(moto);
-                }
-                if(teste == true){
-                    motosDis.add(moto);
-                    testeGeral = true;
-                }
-            }
-            if(testeGeral == false){
-                return false;
-            }
-            Tenancy aux = new Tenancy(idRetal, dataAtual, dataEntrega, cliente, carros, motosDis);
-            idRetal++;
-            tenanciesList.add(aux);
-            clientsList.add(cliente);
-            return true;
-        } 
-    }   
+  public List<Client> getClientsList() {
+    return clientsList;
+  }
 
-    public void showCars(){
-        System.out.println("Carros: ");
-        if(disponibleCarList.size() == 0){
-            System.out.println("Sem carros.");
-        }else{
-            for(int i = 0; i < disponibleCarList.size(); i++){
-                System.out.println(disponibleCarList.get(i));
-                System.out.println("==============================");
-            }
-        }
-    }
-    public void showMotorcycle(){
-        System.out.println("Motos: ");
-        if(disponiblMotorcycle.size() == 0){
-            System.out.println("Sem motos.");
-        }else{
-            for(int i = 0; i < disponiblMotorcycle.size(); i++){
-                System.out.println(disponiblMotorcycle.get(i));
-                System.out.println("==============================");
-            }
-        }
-    }
+  public List<Motorcycle> getDisponiblMotorcycle() {
+    return disponibleMotorcycle;
+  }
 
-    public void showTenancies(){
-        System.out.println("Alocações: ");
-        if(tenanciesList.size() == 0){
-            System.out.println("Sem alocações.");
-        }else{
-            for(int i = 0; i < tenanciesList.size(); i++){
-                System.out.println(tenanciesList.get(i));
-                System.out.println("==============================");
-            }
-        }
-    }
-    public void showClientsList(){
-        System.out.println("Clientes: ");
-        if(tenanciesList.size() == 0){
-            System.out.println("Sem Clientes.");
-        }else{
-            for(int i = 0; i < clientsList.size(); i++){
-                System.out.println(clientsList.get(i));
-                System.out.println("==============================");
-            }
-        }
-    }
+  public List<Car> getDisponibleCarList() {
+    return disponibleCarList;
+  }
 
-    public boolean endTenancie(Tenancy tenancy, Date date){
-        boolean teste = tenanciesList.remove(tenancy);
-        if(teste){
-            float multa = tenancy.calculateFine(date);
-            float valor = tenancy.calculateRentValue();
-            valor += multa;
-            System.out.printf("Total a pagar pelo aluguel $%f.2", valor);
-            return true;
-        }else{
-            System.out.println("Alocação não encontrada");
-            return false;
-        }
-    }
+  public Manager getManager() {
+    return manager;
+  }
 
-    public Date changeDate(Tenancy tenancy, Date date){
-        boolean teste = tenanciesList.remove(tenancy);
-        if(teste){
-            tenancy.setDevolutionDate(date);
-            tenanciesList.add(tenancy);
-        }
-        return date;
-    }
+  public List<Tenancy> getTenanciesList() {
+    return tenanciesList;
+  }
 
-    public int getId() {
-        return id;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public ArrayList<Client> getClientsList() {
-        return clientsList;
-    }
+  public void setId(int id) {
+    if(id >= 0) this.id = id;
+  }
 
-    public ArrayList<Motorcycle> getDisponiblMotorcycle() {
-        return disponiblMotorcycle;
-    }
-
-    public ArrayList<Car> getDisponibleCarList() {
-        return disponibleCarList;
-    }
-
-    public String getManagerName() {
-        return managerName;
-    }
-
-    public ArrayList<Tenancy> getTenanciesList() {
-        return tenanciesList;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setId(int id) {
-        if(id >= 0){
-            this.id = id;
-        }
-    }
-
-    public void setClientsList(ArrayList<Client> clientsList) {
-        this.clientsList = clientsList;
-    }
-
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
-    }
+  public void setClientsList(ArrayList<Client> clientsList) {
+    this.clientsList = clientsList;
+  }
 }

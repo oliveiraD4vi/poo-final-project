@@ -22,7 +22,7 @@ public class Motorcycle extends Vehicle {
    * @param color é a cor da moto
    * @param plate é a placa da moto
    */
-  Motorcycle (int id, String brand, String model, String color, String plate) {
+  public Motorcycle (int id, String brand, String model, String color, String plate) {
     super(id, brand, model, color, plate);
     setType('M');
     setBasePrice((float)12.5);

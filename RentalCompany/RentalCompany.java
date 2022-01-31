@@ -23,12 +23,10 @@ public class RentalCompany {
       this.id = id;
       this.manager = manager;
       this.address = address;
-    } else {
-      System.out.println("fail: dados invalidos");
-    }
+    } else System.out.println("fail: dados invalidos");
   }
 
-  public void addCars(Car car){
+  public void addCar(Car car){
     disponibleCarList.add(car);
   }
 
@@ -54,7 +52,7 @@ public class RentalCompany {
     return test;
   }
 
-  public boolean rentVehicle(ArrayList<Car> cars, ArrayList<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
+  public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
     ArrayList<Car> carros = new ArrayList<Car>();
     ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
     boolean testeGeral = false;
@@ -95,48 +93,37 @@ public class RentalCompany {
   }   
 
   public void showCars(){
-    System.out.println("Carros: \n");
-
+    System.out.println("\nCarros:");
     if (disponibleCarList.size() == 0) System.out.println("Não há carros disponíveis!");
     else {
-      for(int i = 0; i < disponibleCarList.size(); i++) {
-        System.out.println(disponibleCarList.get(i));
-        System.out.println("==============================");
-      }
+      for(int i = 0; i < disponibleCarList.size(); i++) System.out.println(disponibleCarList.get(i));
+      System.out.println("==============================");
     }
   }
-  public void showMotorcycle(){
-    System.out.println("Motos: \n");
 
+  public void showMotorcycle(){
+    System.out.println("\nMotos:");
     if (disponibleMotorcycle.size() == 0) System.out.println("Não há motos disponíveis!");
     else {
-      for(int i = 0; i < disponibleMotorcycle.size(); i++) {
-        System.out.println(disponibleMotorcycle.get(i));
-        System.out.println("==============================");
-      }
+      for(int i = 0; i < disponibleMotorcycle.size(); i++) System.out.println(disponibleMotorcycle.get(i));
+      System.out.println("==============================");
     }
   }
 
   public void showTenancies(){
-    System.out.println("Alocações: \n");
-
+    System.out.println("\nLocações:");
     if (tenanciesList.size() == 0) System.out.println("Não há locações registradas!");
     else {
-      for(int i = 0; i < tenanciesList.size(); i++) {
-        System.out.println(tenanciesList.get(i));
-        System.out.println("==============================");
-      }
+      for(int i = 0; i < tenanciesList.size(); i++) System.out.println(tenanciesList.get(i));
+      System.out.println("==============================");
     }
   }
   public void showClientsList(){
-    System.out.println("Clientes: \n");
-
-    if (tenanciesList.size() == 0) System.out.println("Sem Clientes.");
+    System.out.println("\nClientes:");
+    if (tenanciesList.size() == 0) System.out.println("Não há clientes registrados");
     else {
-      for(int i = 0; i < clientsList.size(); i++) {
-        System.out.println(clientsList.get(i));
-        System.out.println("==============================");
-      }
+      for(int i = 0; i < clientsList.size(); i++) System.out.println(clientsList.get(i));
+      System.out.println("==============================");
     }
   }
 
@@ -147,7 +134,7 @@ public class RentalCompany {
       float multa = tenancy.calculateFine(date);
       float valor = tenancy.calculateRentValue();
       valor += multa;
-      System.out.printf("Total a pagar pelo aluguel $%f.2", valor);
+      System.out.printf("Total a pagar pelo aluguel: $%f.2", valor);
       return true;
     } else {
       System.out.println("Locação não encontrada");
@@ -174,7 +161,7 @@ public class RentalCompany {
     return clientsList;
   }
 
-  public List<Motorcycle> getDisponiblMotorcycle() {
+  public List<Motorcycle> getDisponibleMotorcycle() {
     return disponibleMotorcycle;
   }
 

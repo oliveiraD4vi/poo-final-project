@@ -139,7 +139,6 @@ abstract public class Vehicle {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append(getType() + "\n");
     stringBuffer.append("ID: " + getId() + " | " + getPlate().toUpperCase() + "\n");
     stringBuffer.append(getBrand() + " - " + getModel() + ", " + getColor() + "\n");
 

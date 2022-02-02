@@ -139,8 +139,15 @@ abstract public class Vehicle {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append("ID: " + getId() + " | " + getPlate().toUpperCase() + "\n");
-    stringBuffer.append(getBrand() + " - " + getModel() + ", " + getColor() + "\n");
+    String symbol;
+    if (rented) symbol = "-";
+    else symbol = "+";
+
+    stringBuffer.append(symbol + " Id: " + getId());
+    stringBuffer.append(" " + getBrand());
+    stringBuffer.append(" " + getModel());
+    stringBuffer.append(", " + getColor());
+    stringBuffer.append(" | "+ getPlate().toUpperCase());
 
     return stringBuffer.toString();
   }

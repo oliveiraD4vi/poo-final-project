@@ -52,70 +52,107 @@ public class RentalCompany {
     return test;
   }
 
+  // alterar essa classe
   public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
     ArrayList<Car> carros = new ArrayList<Car>();
     ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
     boolean testeGeral = false;
 
-    if ((cars.size()+motos.size()) > 2) {
-      System.out.println("Locação inválida: quantidade excessiva de véiculos!");
-      return false;
-    } else {
-      for(int i = 0; i < 2; i++){
-        Car car = cars.get(i);
-        Motorcycle moto = motos.get(i);
+    switch (cars.size()+motos.size()) {
+      case 1:
         boolean teste = false;
-        if (car != null) teste = removeCar(car);
 
-        if (teste == true) {
-          carros.add(car);
-          testeGeral = true;
+        if (cars.size() != 0) {
+          Car car = cars.get(0);
+          if (car != null) teste = removeCar(car);
+          
+          if (teste == true) {
+            carros.add(car);
+            testeGeral = true;
+          }
         }
         
-        teste = false;
-        
-        if (moto != null) teste = removeMotorcycle(moto);
-        
-        if (teste == true) {
-          motosDis.add(moto);
-          testeGeral = true;
+        if (motos.size() != 0) {
+          teste = false;
+          Motorcycle moto = motos.get(0);
+          
+          if (moto != null) teste = removeMotorcycle(moto);
+          
+          if (teste == true) {
+            motosDis.add(moto);
+            testeGeral = true;
+          }
         }
-      }
 
-      if(testeGeral == false) return false;
+        if(testeGeral == false) return false;
 
-      Tenancy aux = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
-      idRental++;
-      tenanciesList.add(aux);
-      clientsList.add(cliente);
-      return true;
-    } 
+        Tenancy aux = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
+        idRental++;
+        tenanciesList.add(aux);
+        clientsList.add(cliente);
+        return true;
+
+        case 2:
+        for(int i = 0; i < 2; i++){
+          boolean teste2 = false;
+
+          if (cars.size() != 0) {
+            Car car = cars.get(i);
+            if (car != null) teste = removeCar(car);
+            
+            if (teste2 == true) {
+              carros.add(car);
+              testeGeral = true;
+            }
+          }
+          
+          if (motos.size() != 0) {
+            teste2 = false;
+            Motorcycle moto = motos.get(i);
+            
+            if (moto != null) teste = removeMotorcycle(moto);
+            
+            if (teste2 == true) {
+              motosDis.add(moto);
+              testeGeral = true;
+            }
+          }
+        }
+
+        if(testeGeral == false) return false;
+
+        Tenancy aux2 = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
+        idRental++;
+        tenanciesList.add(aux2);
+        clientsList.add(cliente);
+        return true;
+      default:
+        System.out.println("Locação inválida: quantidade excessiva de véiculos");
+        return false;
+    }
   }   
 
   public void showCars(){
     System.out.println("\nCarros:");
-    if (disponibleCarList.size() == 0) System.out.println("Não há carros disponíveis!");
+    if (disponibleCarList.size() == 0) System.out.println("Não há carros disponíveis");
     else {
       for(int i = 0; i < disponibleCarList.size(); i++) System.out.println(disponibleCarList.get(i));
-      System.out.println("==============================");
     }
   }
 
   public void showMotorcycle(){
     System.out.println("\nMotos:");
-    if (disponibleMotorcycle.size() == 0) System.out.println("Não há motos disponíveis!");
+    if (disponibleMotorcycle.size() == 0) System.out.println("Não há motos disponíveis");
     else {
       for(int i = 0; i < disponibleMotorcycle.size(); i++) System.out.println(disponibleMotorcycle.get(i));
-      System.out.println("==============================");
     }
   }
 
   public void showTenancies(){
     System.out.println("\nLocações:");
-    if (tenanciesList.size() == 0) System.out.println("Não há locações registradas!");
+    if (tenanciesList.size() == 0) System.out.println("Não há locações registradas");
     else {
       for(int i = 0; i < tenanciesList.size(); i++) System.out.println(tenanciesList.get(i));
-      System.out.println("==============================");
     }
   }
   public void showClientsList(){
@@ -123,7 +160,6 @@ public class RentalCompany {
     if (tenanciesList.size() == 0) System.out.println("Não há clientes registrados");
     else {
       for(int i = 0; i < clientsList.size(); i++) System.out.println(clientsList.get(i));
-      System.out.println("==============================");
     }
   }
 

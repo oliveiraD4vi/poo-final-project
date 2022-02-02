@@ -32,7 +32,7 @@ public class Person {
   public String toString() {
     return (
       getName() + " | "
-      + getCPF() + "\n"
+      + getCPF() + " | "
       + getEmail() + " | "
       + getPhone()
     );

@@ -164,10 +164,10 @@ public class Tenancy {
     StringBuffer stringBuffer = new StringBuffer();
 
     stringBuffer.append("\nLocation Contract | " + getId());
-    stringBuffer.append("\nClient informations:\n " + getClient());
-    stringBuffer.append("\n\nRent date: " + getRentDate());
-    stringBuffer.append("\nDevolution date: " + getDevolutionDate());
-    stringBuffer.append("\n\nRented vehicles:\n\n");
+    stringBuffer.append("\nClient: " + getClient());
+    stringBuffer.append("\nRent date: " + getRentDate());
+    stringBuffer.append(" Devolution date: " + getDevolutionDate());
+    stringBuffer.append("\nRented vehicles:\n");
 
     if (cars.size() != 0)
       for (int i = 0; i<cars.size(); i++)

@@ -131,6 +131,14 @@ public class Tenancy {
     return id;
   }
 
+  public List<Car> getCars() {
+    return cars;
+  }
+
+  public List<Motorcycle> getMotorcycles() {
+    return motorcycles;
+  }
+
   /**
    * O método getRentDate retorna o objeto Date com 
    * a data de alguel dos veículos

@@ -108,34 +108,32 @@ public class RentalCompany {
   }   
 
   public void showCars(){
-    System.out.println("\nCars:");
-    if (disponibleCarList.size() == 0) System.out.println("No available cars");
-    else {
+    if (disponibleCarList.size() == 0)
+      System.out.println("No available cars");
+    else
       for(int i = 0; i < disponibleCarList.size(); i++) System.out.println(disponibleCarList.get(i));
-    }
   }
 
   public void showMotorcycle(){
-    System.out.println("\nMotorcycles:");
-    if (disponibleMotorcycle.size() == 0) System.out.println("No available motorcycles");
-    else {
+    if (disponibleMotorcycle.size() == 0)
+      System.out.println("No available motorcycles");
+    else
       for(int i = 0; i < disponibleMotorcycle.size(); i++) System.out.println(disponibleMotorcycle.get(i));
-    }
   }
 
   public void showTenancies(){
     System.out.println("\nRents:");
-    if (tenanciesList.size() == 0) System.out.println("No registered rents");
-    else {
+    if (tenanciesList.size() == 0)
+      System.out.println("No registered rents");
+    else
       for(int i = 0; i < tenanciesList.size(); i++) System.out.println(tenanciesList.get(i));
-    }
   }
   public void showClientsList(){
     System.out.println("\nClients:");
-    if (tenanciesList.size() == 0) System.out.println("No registered clients");
-    else {
+    if (tenanciesList.size() == 0)
+      System.out.println("No registered clients");
+    else
       for(int i = 0; i < clientsList.size(); i++) System.out.println(clientsList.get(i));
-    }
   }
 
   public boolean endTenancie(Tenancy tenancy, Date date){
@@ -144,13 +142,22 @@ public class RentalCompany {
     if (test) {
       tenanciesList.add(tenancy);
       tenancy.setStatus(false);
-      float multa = tenancy.calculateFine(date);
-      float valor = tenancy.calculateRentValue();
-      valor += multa;
-      System.out.printf("Total rent value: $%f.2", valor);
+
+      if (tenancy.getCars().size() != 0)
+        for (Car item : tenancy.getCars())
+          if (item.verifyCondition() == true)
+            item.setRented(false);
+
+      if (tenancy.getMotorcycles().size() != 0)
+        for (Motorcycle item : tenancy.getMotorcycles())
+          if (item.verifyCondition() == true)
+            item.setRented(false);
+
+      float value = tenancy.calculateRentValue() + tenancy.calculateFine(date);
+      System.out.printf("\nTotal rent value: R$ %.2f\n", value);
       return true;
     } else {
-      System.out.println("Rent not found");
+      System.out.println("fail: rent not found");
       return false;
     }
   }

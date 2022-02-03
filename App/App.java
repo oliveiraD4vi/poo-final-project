@@ -6,6 +6,7 @@ import Persons.*;
 import Vehicles.*;
 import java.util.*;
 import RentalCompany.RentalCompany;
+import Tenancy.Tenancy;
 
 class App {
   public static void main(String[] args) {
@@ -25,60 +26,61 @@ class App {
 
     if (!updateCar && !updateMoto)
       System.out.print("\n----reading file failed----\n");
-    else 
-      idCounter =
+    else idCounter =
         company.getDisponibleCarList().size() + company.getDisponibleMotorcycle().size();
 
     // menu
     do {
       System.out.println("\nVehicle Rental System - VRS");
+      System.out.println("\nMain actions");
       System.out.println("1. Start a new tenancy");
       System.out.println("2. Show tenancies historic");
       System.out.println("3. Show clients historic");
       System.out.println("4. Show vehicles");
+      System.out.println("0. Quit");
+      System.out.println("\nEdition actions");
       System.out.println("5. Add new car");
       System.out.println("6. Remove a car");
       System.out.println("7. Add new motorcycle");
       System.out.println("8. Remove a motorcycle");
       System.out.println("9. Update an tenancy");
-      System.out.println("0. Quit");
       System.out.print("\nOption: ");
       menuInput = input.next().charAt(0);
         
       switch(menuInput) {
-        case '1': startNewTenancy(company); break;
+        case '1': startNewTenancy(company, input); break;
         case '2': company.showTenancies(); break;
         case '3': company.showClientsList(); break;
         case '4': 
-          System.out.println("\n+ for available\n- for not available");
+          System.out.println("\n+ for available\n- for not available\n");
           company.showCars(); 
           company.showMotorcycle();
           break;
-        case '5': addVehicle(company, 'C', idCounter); break;
-        case '6': removeVehicle(company, 'C', idCounter); break;
-        case '7': addVehicle(company, 'M', idCounter); break;
-        case '8': removeVehicle(company, 'M', idCounter); break;
-        case '9': System.out.println("update tenancy"); break;
+        case '5': addVehicle(company, 'C', idCounter, input); break;
+        case '6': removeVehicle(company, 'C', idCounter, input); break;
+        case '7': addVehicle(company, 'M', idCounter, input); break;
+        case '8': removeVehicle(company, 'M', idCounter, input); break;
+        case '9': updateTenancy(company, input); break;
         case '0': System.out.print("\nleaving...\n"); break;
         default : System.out.print("\n----invalid choice----\n");
       }
     } while (menuInput != '0');
+
+    input.close();
   }
 
-  // testing
-  static void addVehicle(RentalCompany company, char type, int id) {
+  static void addVehicle(RentalCompany company, char type, int id, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
     id++;
 
-    Scanner input = new Scanner(System.in);
-
     System.out.print("Brand: ");
-    String brand = input.nextLine();
+    String brand = in.next();
     System.out.print("Model: ");
-    String model = input.nextLine();
+    String model = in.next();
     System.out.print("Color: ");
-    String color = input.nextLine();
-    String plate = "a3232w";
+    String color = in.next();
+    System.out.print("Plate (format AAA-0000): ");
+    String plate = in.next();
 
     if (type == 'C') {
       Car newCar = new Car(id, brand, model, color, plate);
@@ -89,23 +91,21 @@ class App {
     }
   }
 
-  // testing
-  static void removeVehicle(RentalCompany company, char type, int id) {
+  static void removeVehicle(RentalCompany company, char type, int id, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
-    Scanner input = new Scanner(System.in);
+    boolean idFound = false;
 
     if (type == 'C') {
       if (company.getDisponibleCarList().size() != 0) {
-        int removedId;
-        
         company.showCars();
-        System.out.println("\nInsert the ID: ");
-        removedId = input.nextInt();
+        System.out.print("\nInsert the ID: ");
+        int removedId = in.nextInt();
         
         Car removedCar;
         for (int i = 0; i < company.getDisponibleCarList().size(); i++) {
           if (company.getDisponibleCarList().get(i).getId() == removedId) {
+            idFound = true;
             removedCar = company.getDisponibleCarList().get(i);
             company.removeCar(removedCar);
             break;
@@ -116,15 +116,14 @@ class App {
     
     if (type == 'M') {
       if (company.getDisponibleMotorcycle().size() != 0) {
-        int removedId;
-        
         company.showMotorcycle();
-        System.out.println("\nInsert the ID: ");
-        removedId = input.nextInt();
+        System.out.print("\nInsert the ID: ");
+        int removedId = in.nextInt();
         
         Motorcycle removedMotocycle;
         for (int i = 0; i < company.getDisponibleMotorcycle().size(); i++) {
           if (company.getDisponibleMotorcycle().get(i).getId() == removedId) {
+            idFound = true;
             removedMotocycle = company.getDisponibleMotorcycle().get(i);
             company.removeMotorcycle(removedMotocycle);
             break;
@@ -132,16 +131,50 @@ class App {
         }
       } else System.out.println("fail: no motorcycles");
     }
+
+    if (!idFound) System.out.println("fail: id not found");
   }
 
-  private static void startNewTenancy(RentalCompany company) {
+  static void updateTenancy(RentalCompany company, Scanner in) {
+    System.out.println("\nVehicle Rental System - VRS");
+
+    if (company.getTenanciesList().size() == 0) {
+      System.out.println("fail: no tenancies");
+    } else {
+      company.showTenancies();
+
+      System.out.print("Insert the Id: ");
+      int updateId = in.nextInt();
+      System.out.print("\nInsert devolution date");
+      System.out.print("\nDay: ");
+      Byte tempDay = in.nextByte();
+      System.out.print("Month: ");
+      Byte tempMonth = in.nextByte();
+      System.out.print("Year: ");
+      Short tempYear = in.nextShort();
+
+      Date finalDevolution = new Date(tempDay, tempMonth, tempYear);
+
+      boolean idFound = false;
+
+      for (Tenancy item : company.getTenanciesList())
+        if (item.getId() == updateId) {
+          idFound = true;
+          company.endTenancie(item, finalDevolution);
+        }
+
+      if (!idFound) System.out.print("\nfail: id not found\n");
+    }
+  }
+
+  static void startNewTenancy(RentalCompany company, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
     if (company.getDisponibleCarList().size() == 0 && company.getDisponibleMotorcycle().size() == 0) {
       System.out.println("fail: no available vehicles");
     } else {
       System.out.println("Veículos disponíveis:");
-      System.out.println("\n+ for available\n- for not available");
+      System.out.println("\n+ for available\n- for not available\n");
       company.showCars();
       company.showMotorcycle();
       
@@ -149,18 +182,19 @@ class App {
       List<Car> cars = new ArrayList<Car>();
       List<Motorcycle> motorcycles = new ArrayList<Motorcycle>();
       
-      Scanner input = new Scanner(System.in);
-      
       System.out.println();
 
       do {
         System.out.print("Insira o ID do veículo que quer alugar (0 para cancelar): ");
-        dataInput = input.nextInt();
+        dataInput = in.nextInt();
 
         if (dataInput == 0) break;
         
+        boolean inputFound = false;
+
         for (int i = 0; i < company.getDisponibleCarList().size(); i++) {
           if (company.getDisponibleCarList().get(i).getId() == dataInput) {
+            inputFound = true;
             if (company.getDisponibleCarList().get(i).verifyCondition() == false) {
               cars.add(company.getDisponibleCarList().get(i));
               break;
@@ -172,6 +206,7 @@ class App {
         
         for (int i = 0; i < company.getDisponibleMotorcycle().size(); i++) {
           if (company.getDisponibleMotorcycle().get(i).getId() == dataInput) {
+            inputFound = true;
             if (company.getDisponibleMotorcycle().get(i).verifyCondition() == false) {
               motorcycles.add(company.getDisponibleMotorcycle().get(i));
               break;
@@ -180,32 +215,34 @@ class App {
             }
           }
         }
+
+        if (!inputFound) System.out.println("fail: invalid id");
       } while (cars.size()+motorcycles.size() < 2);
 
       if (cars.size()+motorcycles.size() == 0) {
         System.out.print("\n----rent cancelled----\n");
       } else {
-        System.out.println("Insira as informações do cliente");
-        System.out.print("\nNome: ");
-        String tempName = input.next();
+        System.out.print("\nInsert client data\n");
+        System.out.print("Nome: ");
+        String tempName = in.next();
         System.out.print("CPF: ");
-        String tempCPF = input.next();
+        String tempCPF = in.next();
         System.out.print("Email: ");
-        String tempEmail = input.next();
+        String tempEmail = in.next();
         System.out.print("Fone: ");
-        String tempPhone = input.next();
+        String tempPhone = in.next();
         System.out.println();
         
         Client client = new Client(tempName, tempCPF, tempEmail, tempPhone);
         Date presentDate = new Date((byte)5, (byte)2, (short)2021);
         
-        System.out.println("Insira a data de devolução");
+        System.out.print("Insert devolution date");
         System.out.print("\nDay: ");
-        Byte tempDay = input.nextByte();
+        Byte tempDay = in.nextByte();
         System.out.print("Month: ");
-        Byte tempMonth = input.nextByte();
+        Byte tempMonth = in.nextByte();
         System.out.print("Year: ");
-        Short tempYear = input.nextShort();
+        Short tempYear = in.nextShort();
         
         Date devolution = new Date(tempDay, tempMonth, tempYear);
         

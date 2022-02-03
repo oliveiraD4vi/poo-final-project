@@ -143,7 +143,7 @@ abstract public class Vehicle {
     if (rented) symbol = "-";
     else symbol = "+";
 
-    stringBuffer.append(symbol + " Id: " + getId());
+    stringBuffer.append(symbol + " " + getType() + " Id: " + getId());
     stringBuffer.append(" " + getBrand());
     stringBuffer.append(" " + getModel());
     stringBuffer.append(", " + getColor());

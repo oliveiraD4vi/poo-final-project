@@ -11,7 +11,7 @@
 
 package Vehicles;
 
-public class Car extends Vehicle {
+public class Car extends Vehicle implements Comparable<Car> {
   /**
    * O método Construtor da classe seta os valores iniciais do
    * objeto e os valores não atribuídos inicialmente na classe
@@ -42,5 +42,9 @@ public class Car extends Vehicle {
     }
 
     return priceByDay;
+  }
+
+  @Override public int compareTo(Car c){
+    return Integer.compare(this.id, c.getId());
   }
 }

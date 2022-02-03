@@ -11,7 +11,7 @@
 
 package Vehicles;
 
-public class Motorcycle extends Vehicle {
+public class Motorcycle extends Vehicle implements Comparable<Motorcycle> {
   /**
    * O método Construtor da classe seta os valores iniciais do
    * objeto e os valores não atribuídos inicialmente na classe
@@ -22,9 +22,9 @@ public class Motorcycle extends Vehicle {
    * @param color é a cor da moto
    * @param plate é a placa da moto
    */
-  Motorcycle (int id, String brand, String model, String color, String plate) {
+  public Motorcycle (int id, String brand, String model, String color, String plate) {
     super(id, brand, model, color, plate);
-    setType('M');
+    setType("M");
     setBasePrice((float)12.5);
   }
 
@@ -42,5 +42,9 @@ public class Motorcycle extends Vehicle {
     }
 
     return priceByDay;
+  }
+
+  @Override public int compareTo(Motorcycle m){
+    return Integer.compare(this.id, m.getId());
   }
 }

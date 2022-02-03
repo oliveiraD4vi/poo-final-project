@@ -24,7 +24,7 @@ public class Motorcycle extends Vehicle implements Comparable<Motorcycle> {
    */
   public Motorcycle (int id, String brand, String model, String color, String plate) {
     super(id, brand, model, color, plate);
-    setType('M');
+    setType("M");
     setBasePrice((float)12.5);
   }
 

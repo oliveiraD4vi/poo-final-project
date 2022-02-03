@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import Date.Date;
 import Persons.Client;
+import Persons.Manager;
 import Tenancy.Tenancy;
 import Vehicles.Car;
 import Vehicles.Motorcycle;
@@ -11,7 +12,7 @@ import Vehicles.Motorcycle;
 //classe locadora
 public class RentalCompany {
     private int id;
-    private String managerName;
+    private Manager managerName;
     private ArrayList<Car> disponibleCarList = new ArrayList<Car>();
     private ArrayList<Motorcycle> disponiblMotorcycle = new ArrayList<Motorcycle>();
     private ArrayList<Tenancy> tenanciesList = new ArrayList<Tenancy>();
@@ -19,7 +20,12 @@ public class RentalCompany {
     private int idRetal;
     private String address;
 
-    public RentalCompany(int id, String manegerName, String address){
+    /**O método Construtor recebe parâmetros para setar nos atributos
+     * @param id é id da locadora
+     * @param ManegerName é o gerente da locadora
+     * @param address é o endereço da locadora 
+     */
+    public RentalCompany(int id, Manager manegerName, String address){
         if(id >= 0){
             this.id = id;
             this.managerName = manegerName;
@@ -29,11 +35,19 @@ public class RentalCompany {
         }
     }
 
+    /**
+     * O metodo addCars adiciona um carro na locadora para aluguel
+     * @param car é o carro a ser adicionado;
+     */
     public void addCars(Car car){
         disponibleCarList.add(car);
         Collections.sort(disponibleCarList);
     }
-
+    /**
+     * O metodo removeCar remove um carro da locadora
+     * @param car é o carro a ser removido
+     * @return retorna um booleano, true caso o carro seja removido, false caso o carro não seja removido
+     */
     public boolean removeCar(Car car){
         boolean test = disponibleCarList.remove(car);
         if(test == false){
@@ -42,11 +56,20 @@ public class RentalCompany {
         return test;
     }
 
+    /**
+     * O metodo addMotorcycle adiciona uma moto na locadora para aluguel
+     * @param moto é a moto a ser adicionada
+     */
     public void addMotorcycle(Motorcycle moto){
         disponiblMotorcycle.add(moto);
         Collections.sort(disponiblMotorcycle);
     }
 
+    /**
+     * O metodo removeMotorcycle remove uma moto da locadora
+     * @param moto é a moto a ser removida
+     * @return retorna true caso a moto seja rempvida e false caso não
+     */
     public boolean removeMotorcycle(Motorcycle moto){
         boolean test = disponiblMotorcycle.remove(moto);
         if(test == false){
@@ -55,6 +78,15 @@ public class RentalCompany {
         return test;
     }
 
+    /**
+     * O metodo rentVehicle aluga carros e/ou motos
+     * @param cars é uma lista dos carros a serem alugados
+     * @param motos é uma lista de motos a serem alugados
+     * @param cliente é o cliente que vai alugar os veiculos
+     * @param dataAtual é a data do aluguel
+     * @param dataEntrega é a data de entrega dos veiculos
+     * @return retorna true caso ocorra o aluguel, false caso não
+     */
     public boolean rentVehicle(ArrayList<Car> cars, ArrayList<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
         ArrayList<Car> carros = new ArrayList<Car>();
         ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
@@ -123,6 +155,9 @@ public class RentalCompany {
         } 
     }   
 
+    /**
+     * Mostra os carros disponiveis para aluguel
+     */
     public void showCars(){
         System.out.println("Carros: ");
         if(disponibleCarList.size() == 0){
@@ -135,6 +170,9 @@ public class RentalCompany {
             }
         }
     }
+    /**
+     * Mostra as motos disponiveis para aluguel
+     */
     public void showMotorcycle(){
         System.out.println("Motos: ");
         if(disponiblMotorcycle.size() == 0){
@@ -148,6 +186,9 @@ public class RentalCompany {
         }
     }
 
+    /**
+     * Mostra os alugueis realizados
+     */
     public void showTenancies(){
         System.out.println("Alocações: ");
         if(tenanciesList.size() == 0){
@@ -160,6 +201,10 @@ public class RentalCompany {
             }
         }
     }
+
+    /**
+     * Mostra os clientes da locadora de carro
+     */
     public void showClientsList(){
         System.out.println("Clientes: ");
         if(tenanciesList.size() == 0){
@@ -173,6 +218,12 @@ public class RentalCompany {
         }
     }
 
+    /**
+     * Termina um aluguel de veiculo
+     * @param tenancy é o aluguel a ser encerrado 
+     * @param date é a data em que o contrado foi encerrado
+     * @return retorna true caso contrato seja encerrado, false caso não
+     */
     public boolean endTenancie(Tenancy tenancy, Date date){
         boolean teste = tenanciesList.remove(tenancy);
         if(teste){
@@ -187,6 +238,12 @@ public class RentalCompany {
         }
     }
 
+    /**
+     * Muda daata de vencimento do aluguel
+     * @param tenancy é o aluguel que terá a data modificada
+     * @param date é a nova data de vencimento
+     * @return retorna a nova data
+     */
     public Date changeDate(Tenancy tenancy, Date date){
         boolean teste = tenanciesList.remove(tenancy);
         if(teste){
@@ -196,6 +253,7 @@ public class RentalCompany {
         return date;
     }
 
+    //Gets e Sets
     public int getId() {
         return id;
     }
@@ -212,7 +270,7 @@ public class RentalCompany {
         return disponibleCarList;
     }
 
-    public String getManagerName() {
+    public Manager getManagerName() {
         return managerName;
     }
 
@@ -234,13 +292,14 @@ public class RentalCompany {
         this.clientsList = clientsList;
     }
 
-    public void setManagerName(String managerName) {
+    public void setManagerName(Manager managerName) {
         this.managerName = managerName;
     }
 
+    //O metodo toString retorna uma String formatada com as informações do objeto da Classe RentalCompany
     @Override
     public String toString() {
-        String frase = "Maneger: \n" + managerName + "\n==============================\n";
+        String frase = "Maneger: \n" + managerName.getName() + "\n==============================\n";
         frase = frase + "Address: \n" + address + "\n==============================\n";
         
         frase += "Carros: \n";

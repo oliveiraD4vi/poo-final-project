@@ -24,7 +24,7 @@ public class Car extends Vehicle implements Comparable<Car> {
    */
   public Car (int id, String brand, String model, String color, String plate) {
     super(id, brand, model, color, plate);
-    setType('C');
+    setType("C");
     setBasePrice((float)18.5);
   }
 

@@ -19,11 +19,11 @@ public class RentalCompany {
   private List<Client> clientsList = new ArrayList<Client>();
 
   public RentalCompany(int id, Manager manager, String address){
-    if (id >= 0){
+    if (id > 0){
       this.id = id;
       this.manager = manager;
       this.address = address;
-    } else System.out.println("fail: dados invalidos");
+    } else System.out.println("fail: invalid data");
   }
 
   public void addCar(Car car){
@@ -31,12 +31,12 @@ public class RentalCompany {
   }
 
   public boolean removeCar(Car car){
-    boolean test = disponibleCarList.remove(car);
-    
-    if (test == false)
-      System.out.println("fail: carro não presente");
-    
-    return test;
+    if (disponibleCarList.remove(car))
+      return true;
+    else {
+      System.out.println("fail: car not found");
+      return false;
+    }
   }
 
   public void addMotorcycle(Motorcycle moto){
@@ -44,136 +44,113 @@ public class RentalCompany {
   }
 
   public boolean removeMotorcycle(Motorcycle moto){
-    boolean test = disponibleMotorcycle.remove(moto);
-    
-    if (test == false)
-      System.out.println("fail: moto não presente");
-
-    return test;
+    if (disponibleMotorcycle.remove(moto))
+      return true;
+    else {
+      System.out.println("fail: motorcycle not found");
+      return false;
+    }
   }
 
-  // alterar essa classe
-  public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client cliente, Date dataAtual, Date dataEntrega){
-    ArrayList<Car> carros = new ArrayList<Car>();
-    ArrayList<Motorcycle> motosDis = new ArrayList<Motorcycle>();
-    boolean testeGeral = false;
-
-    switch (cars.size()+motos.size()) {
-      case 1:
-        boolean teste = false;
-
+  public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client client, Date dataAtual, Date dataEntrega){
+    boolean verifyTenancies = false;
+    
+    for (Tenancy item : tenanciesList)
+      if (item.getClient().getCPF().equals(client.getCPF()) && item.verifyStatus()) {
+        verifyTenancies = true;
+        break;
+      }
+    
+    if (verifyTenancies) {
+      System.out.print("\nfail: client already has an current tenancy contract");
+      return false;
+    } else {
+      if (cars.size()+motos.size() == 1 || cars.size()+motos.size() == 2) {
+        idRental++;
+        
         if (cars.size() != 0) {
-          Car car = cars.get(0);
-          if (car != null) teste = removeCar(car);
-          
-          if (teste == true) {
-            carros.add(car);
-            testeGeral = true;
+          for (Car carRent : cars) {
+            for (Car carAvailable : disponibleCarList) {
+              if (carRent.getId() == carAvailable.getId())
+                carAvailable.setRented(true);
+            }
           }
         }
         
         if (motos.size() != 0) {
-          teste = false;
-          Motorcycle moto = motos.get(0);
-          
-          if (moto != null) teste = removeMotorcycle(moto);
-          
-          if (teste == true) {
-            motosDis.add(moto);
-            testeGeral = true;
-          }
-        }
-
-        if(testeGeral == false) return false;
-
-        Tenancy aux = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
-        idRental++;
-        tenanciesList.add(aux);
-        clientsList.add(cliente);
-        return true;
-
-        case 2:
-        for(int i = 0; i < 2; i++){
-          boolean teste2 = false;
-
-          if (cars.size() != 0) {
-            Car car = cars.get(i);
-            if (car != null) teste = removeCar(car);
-            
-            if (teste2 == true) {
-              carros.add(car);
-              testeGeral = true;
-            }
-          }
-          
-          if (motos.size() != 0) {
-            teste2 = false;
-            Motorcycle moto = motos.get(i);
-            
-            if (moto != null) teste = removeMotorcycle(moto);
-            
-            if (teste2 == true) {
-              motosDis.add(moto);
-              testeGeral = true;
+          for (Motorcycle motoRent : motos) {
+            for (Motorcycle motoAvailable : disponibleMotorcycle) {
+              if (motoRent.getId() == motoAvailable.getId())
+                motoAvailable.setRented(true);
             }
           }
         }
+        
+        Tenancy rent = new Tenancy(idRental, dataAtual, dataEntrega, client, cars, motos);
+        tenanciesList.add(rent);
 
-        if(testeGeral == false) return false;
+        boolean clientExist = false;
 
-        Tenancy aux2 = new Tenancy(idRental, dataAtual, dataEntrega, cliente, carros, motosDis);
-        idRental++;
-        tenanciesList.add(aux2);
-        clientsList.add(cliente);
+        for (Client item : clientsList)
+          if (item.getCPF().equals(client.getCPF())) {
+            clientExist = true;
+            break;
+          }
+
+        if (!clientExist) clientsList.add(client);
+        
         return true;
-      default:
-        System.out.println("Locação inválida: quantidade excessiva de véiculos");
+      } else {
+        System.out.println("fail: vehicles quantity error");
         return false;
+      }    
     }
   }   
 
   public void showCars(){
-    System.out.println("\nCarros:");
-    if (disponibleCarList.size() == 0) System.out.println("Não há carros disponíveis");
+    System.out.println("\nCars:");
+    if (disponibleCarList.size() == 0) System.out.println("No available cars");
     else {
       for(int i = 0; i < disponibleCarList.size(); i++) System.out.println(disponibleCarList.get(i));
     }
   }
 
   public void showMotorcycle(){
-    System.out.println("\nMotos:");
-    if (disponibleMotorcycle.size() == 0) System.out.println("Não há motos disponíveis");
+    System.out.println("\nMotorcycles:");
+    if (disponibleMotorcycle.size() == 0) System.out.println("No available motorcycles");
     else {
       for(int i = 0; i < disponibleMotorcycle.size(); i++) System.out.println(disponibleMotorcycle.get(i));
     }
   }
 
   public void showTenancies(){
-    System.out.println("\nLocações:");
-    if (tenanciesList.size() == 0) System.out.println("Não há locações registradas");
+    System.out.println("\nRents:");
+    if (tenanciesList.size() == 0) System.out.println("No registered rents");
     else {
       for(int i = 0; i < tenanciesList.size(); i++) System.out.println(tenanciesList.get(i));
     }
   }
   public void showClientsList(){
-    System.out.println("\nClientes:");
-    if (tenanciesList.size() == 0) System.out.println("Não há clientes registrados");
+    System.out.println("\nClients:");
+    if (tenanciesList.size() == 0) System.out.println("No registered clients");
     else {
       for(int i = 0; i < clientsList.size(); i++) System.out.println(clientsList.get(i));
     }
   }
 
   public boolean endTenancie(Tenancy tenancy, Date date){
-    boolean teste = tenanciesList.remove(tenancy);
+    boolean test = tenanciesList.remove(tenancy);
 
-    if (teste) {
+    if (test) {
+      tenanciesList.add(tenancy);
+      tenancy.setStatus(false);
       float multa = tenancy.calculateFine(date);
       float valor = tenancy.calculateRentValue();
       valor += multa;
-      System.out.printf("Total a pagar pelo aluguel: $%f.2", valor);
+      System.out.printf("Total rent value: $%f.2", valor);
       return true;
     } else {
-      System.out.println("Locação não encontrada");
+      System.out.println("Rent not found");
       return false;
     }
   }

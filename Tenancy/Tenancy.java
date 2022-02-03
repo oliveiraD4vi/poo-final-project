@@ -163,7 +163,11 @@ public class Tenancy {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append("\nLocation Contract | " + getId());
+    stringBuffer.append("\nLocation Contract | " + getId() + " | ");
+
+    if (verifyStatus()) stringBuffer.append("OPEN");
+    else stringBuffer.append("FINISHED");
+
     stringBuffer.append("\nClient: " + getClient());
     stringBuffer.append("\nRent date: " + getRentDate());
     stringBuffer.append(" Devolution date: " + getDevolutionDate());

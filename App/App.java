@@ -11,7 +11,7 @@ class App {
   public static void main(String[] args) {
     Locale.setDefault(Locale.US);
     Scanner input = new Scanner(System.in);
-    // int idCounter = 0;
+    int idCounter = 0;
 
     // variavel que guarda o input do usuário
     char menuInput;
@@ -20,9 +20,14 @@ class App {
     Manager manager = new Manager("Kevin", "04896138376", "kevinarruda@email.com", "888928292");
     RentalCompany company = new RentalCompany(1, manager, "Rua Pedro Alves Feitosa, 232 - Centro, Fortaleza - CE - Brasil");
 
-    // verifica situação dos veículos
-    // se já existir um arquivo com carros e etc, insere, se não, pede ao usuário que insira pelo ou menos um carro e uma moto na lista
-    updateVehicleList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
+    boolean updateCar = updateCarsList(company.getDisponibleCarList());
+    boolean updateMoto = updateMotorcyclesList(company.getDisponibleMotorcycle());
+
+    if (!updateCar && !updateMoto)
+      System.out.print("\n----reading file failed----\n");
+    else 
+      idCounter =
+        company.getDisponibleCarList().size() + company.getDisponibleMotorcycle().size();
 
     // menu
     do {
@@ -30,8 +35,13 @@ class App {
       System.out.println("1. Start a new tenancy");
       System.out.println("2. Show tenancies historic");
       System.out.println("3. Show clients historic");
-      System.out.println("4. Update an tenancy");
-      System.out.println("5. Quit");
+      System.out.println("4. Show vehicles");
+      System.out.println("5. Add new car");
+      System.out.println("6. Remove a car");
+      System.out.println("7. Add new motorcycle");
+      System.out.println("8. Remove a motorcycle");
+      System.out.println("9. Update an tenancy");
+      System.out.println("0. Quit");
       System.out.print("\nOption: ");
       menuInput = input.next().charAt(0);
         
@@ -39,13 +49,23 @@ class App {
         case '1': startNewTenancy(company); break;
         case '2': company.showTenancies(); break;
         case '3': company.showClientsList(); break;
-        case '4': System.out.print("\nYou choosed 4\n"); break;
-        case '5': System.out.print("\nleaving...\n"); break;
+        case '4': 
+          System.out.println("\n+ for available\n- for not available");
+          company.showCars(); 
+          company.showMotorcycle();
+          break;
+        case '5': addVehicle(company, 'C', idCounter); break;
+        case '6': removeVehicle(company, 'C', idCounter); break;
+        case '7': addVehicle(company, 'M', idCounter); break;
+        case '8': removeVehicle(company, 'M', idCounter); break;
+        case '9': System.out.println("update tenancy"); break;
+        case '0': System.out.print("\nleaving...\n"); break;
         default : System.out.print("\n----invalid choice----\n");
       }
-    } while (menuInput != '5');
+    } while (menuInput != '0');
   }
 
+  // testing
   static void addVehicle(RentalCompany company, char type, int id) {
     System.out.println("\nVehicle Rental System - VRS");
     id++;
@@ -69,6 +89,7 @@ class App {
     }
   }
 
+  // testing
   static void removeVehicle(RentalCompany company, char type, int id) {
     System.out.println("\nVehicle Rental System - VRS");
 
@@ -120,6 +141,7 @@ class App {
       System.out.println("fail: no available vehicles");
     } else {
       System.out.println("Veículos disponíveis:");
+      System.out.println("\n+ for available\n- for not available");
       company.showCars();
       company.showMotorcycle();
       
@@ -129,57 +151,73 @@ class App {
       
       Scanner input = new Scanner(System.in);
       
+      System.out.println();
+
       do {
-        System.out.print("Insira o ID do veículo que quer alugar (0 para parar): ");
+        System.out.print("Insira o ID do veículo que quer alugar (0 para cancelar): ");
         dataInput = input.nextInt();
+
+        if (dataInput == 0) break;
         
         for (int i = 0; i < company.getDisponibleCarList().size(); i++) {
           if (company.getDisponibleCarList().get(i).getId() == dataInput) {
-            cars.add(company.getDisponibleCarList().get(i));
-            break;
+            if (company.getDisponibleCarList().get(i).verifyCondition() == false) {
+              cars.add(company.getDisponibleCarList().get(i));
+              break;
+            } else {
+              System.out.println("fail: car not available");
+            }
           }
         }
         
         for (int i = 0; i < company.getDisponibleMotorcycle().size(); i++) {
           if (company.getDisponibleMotorcycle().get(i).getId() == dataInput) {
-            motorcycles.add(company.getDisponibleMotorcycle().get(i));
-            break;
+            if (company.getDisponibleMotorcycle().get(i).verifyCondition() == false) {
+              motorcycles.add(company.getDisponibleMotorcycle().get(i));
+              break;
+            } else {
+              System.out.println("fail: motorcycle not available");
+            }
           }
         }
-      } while (dataInput != 0);
-      
-      System.out.println("Insira as informações do cliente");
-      System.out.print("\nNome: ");
-      String tempName = input.next();
-      System.out.print("CPF: ");
-      String tempCPF = input.next();
-      System.out.print("Email: ");
-      String tempEmail = input.next();
-      System.out.print("Fone: ");
-      String tempPhone = input.next();
-      System.out.println();
-      
-      Client client = new Client(tempName, tempCPF, tempEmail, tempPhone);
-      Date presentDate = new Date((byte)5, (byte)2, (short)2021);
-      
-      System.out.println("Insira a data de devolução");
-      System.out.print("\nDay: ");
-      Byte tempDay = input.nextByte();
-      System.out.print("Month: ");
-      Byte tempMonth = input.nextByte();
-      System.out.print("Year: ");
-      Short tempYear = input.nextShort();
-      
-      Date devolution = new Date(tempDay, tempMonth, tempYear);
-      
-      boolean test = company.rentVehicle(cars, motorcycles, client, presentDate, devolution);
-      
-      if (test) System.out.print("\n----Succesful Transaction----\n");
-      else System.out.print("\n----Failed----\n");
+      } while (cars.size()+motorcycles.size() < 2);
+
+      if (cars.size()+motorcycles.size() == 0) {
+        System.out.print("\n----rent cancelled----\n");
+      } else {
+        System.out.println("Insira as informações do cliente");
+        System.out.print("\nNome: ");
+        String tempName = input.next();
+        System.out.print("CPF: ");
+        String tempCPF = input.next();
+        System.out.print("Email: ");
+        String tempEmail = input.next();
+        System.out.print("Fone: ");
+        String tempPhone = input.next();
+        System.out.println();
+        
+        Client client = new Client(tempName, tempCPF, tempEmail, tempPhone);
+        Date presentDate = new Date((byte)5, (byte)2, (short)2021);
+        
+        System.out.println("Insira a data de devolução");
+        System.out.print("\nDay: ");
+        Byte tempDay = input.nextByte();
+        System.out.print("Month: ");
+        Byte tempMonth = input.nextByte();
+        System.out.print("Year: ");
+        Short tempYear = input.nextShort();
+        
+        Date devolution = new Date(tempDay, tempMonth, tempYear);
+        
+        if (company.rentVehicle(cars, motorcycles, client, presentDate, devolution))
+          System.out.print("\n----Succesful Transaction----\n");
+        else
+          System.out.print("\n----Failed----\n");
+      }
     }
   }
 
-  private static void updateVehicleList(List<Car> disponibleCars, List<Motorcycle> disponibleMotorcycle) {
+  static boolean updateCarsList(List<Car> disponibleVehicles) {
     int tempIntID;
     String tempID;
     String tempBrand;
@@ -201,14 +239,27 @@ class App {
 
         tempIntID = Integer.parseInt(tempID);
 
-        disponibleCars.add(new Car(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
+        disponibleVehicles.add(new Car(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
         tempID = carStream.readLine();
       }
+
+      return true;
     } catch(FileNotFoundException e) {
       System.out.print("\nfail: no file was found to read\n");
+      return false;
     } catch(IOException e) {
       System.out.print("\nfail: there was a problem reading the file\n");
+      return false;
     }
+  }
+
+  static boolean updateMotorcyclesList(List<Motorcycle> disponibleVehicles) {
+    int tempIntID;
+    String tempID;
+    String tempBrand;
+    String tempModel;
+    String tempColor;
+    String tempPlate;
 
     try (
         FileReader motoFile = new FileReader("txtFiles/Motorcycles.txt");
@@ -224,16 +275,21 @@ class App {
 
         tempIntID = Integer.parseInt(tempID);
 
-        disponibleMotorcycle.add(new Motorcycle(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
+        disponibleVehicles.add(new Motorcycle(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
         tempID = motoStream.readLine();
       }
+
+      return true;
     } catch(FileNotFoundException e) {
       System.out.print("\nfail: no file was found to read\n");
+      return false;
     } catch(IOException e) {
       System.out.print("\nfail: there was a problem reading the file\n");
+      return false;
     }
   }
 
+  // testing
   static void writeCarsList(List<Car> disponibleCar) {
     try (
       FileWriter carFile = new FileWriter("txtFiles/Cars.txt");
@@ -251,6 +307,7 @@ class App {
     }
   }
 
+  // testing
   static void writeMotorcyclesList(List<Motorcycle> disponibleMotorcycle) {
     try (
       FileWriter motoFile = new FileWriter("txtFiles/Motorcycles.txt");

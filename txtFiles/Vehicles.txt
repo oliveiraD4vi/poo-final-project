@@ -1,6 +1,6 @@
 1
 C
-true
+false
 Chevrolet
 Onix
 Black
@@ -28,7 +28,7 @@ Black
 EXR-0528
 5
 C
-false
+true
 Chevrolet
 Onix
 Silver
@@ -63,7 +63,7 @@ Red
 NDK-1918
 10
 C
-false
+true
 Volkswagen
 Voyage
 Black
@@ -91,14 +91,14 @@ Red
 HQO-0387
 14
 M
-true
+false
 Honda
 X-ADV
 Red
 MFR-0827
 15
 M
-false
+true
 Honda
 X-ADV
 Black

@@ -153,22 +153,34 @@ class App {
 
       System.out.print("Insert the Id: ");
       int updateId = in.nextInt();
-      System.out.print("\nInsert devolution date");
-      System.out.print("\nDay: ");
-      Byte tempDay = in.nextByte();
-      System.out.print("Month: ");
-      Byte tempMonth = in.nextByte();
-      System.out.print("Year: ");
-      Short tempYear = in.nextShort();
-
-      Date finalDevolution = new Date(tempDay, tempMonth, tempYear);
 
       boolean idFound = false;
 
       for (Tenancy item : company.getTenanciesList())
         if (item.getId() == updateId) {
           idFound = true;
-          company.endTenancie(item, finalDevolution);
+
+          System.out.print("\nWhat do you want to do?");
+          System.out.print("\n1. Change devolution date");
+          System.out.print("\n2. End tenancy");
+          System.out.print("\n\nOption: ");
+          char userIn = in.next().charAt(0);
+
+          System.out.print("\nInsert devolution date");
+          System.out.print("\nDay: ");
+          Byte tempDay = in.nextByte();
+          System.out.print("Month: ");
+          Byte tempMonth = in.nextByte();
+          System.out.print("Year: ");
+          Short tempYear = in.nextShort();
+
+          Date finalDevolution = new Date(tempDay, tempMonth, tempYear);
+
+          if (userIn == '1') company.changeDate(item, finalDevolution);
+          else if (userIn == '2') company.endTenancie(item, finalDevolution);
+          else System.out.println("fail: invalid option");
+
+          break;
         }
 
       if (!idFound) System.out.print("\nfail: id not found\n");
@@ -181,8 +193,8 @@ class App {
     if (company.getDisponibleCarList().size() == 0 && company.getDisponibleMotorcycle().size() == 0) {
       System.out.println("fail: no available vehicles");
     } else {
-      System.out.println("Veículos disponíveis:");
-      System.out.println("\n+ for available\n- for not available\n");
+      System.out.println("\n+ for available\n- for not available");
+      System.out.println("\nAvailable vehicles:");
       company.showCars();
       System.out.println();
       company.showMotorcycle();
@@ -194,7 +206,7 @@ class App {
       System.out.println();
 
       do {
-        System.out.print("Insira o ID do veículo que quer alugar (0 para cancelar): ");
+        System.out.print("Insert the vehicle Id (0 for cancel): ");
         dataInput = in.nextInt();
 
         if (dataInput == 0) break;

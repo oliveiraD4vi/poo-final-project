@@ -242,12 +242,12 @@ public class RentalCompany {
     return disponibleCarList;
   }
 
-  public Manager getManager() {
-    return manager;
-  }
-
   public List<Tenancy> getTenanciesList() {
     return tenanciesList;
+  }
+
+  public Manager getManager() {
+    return manager;
   }
 
   public String getAddress() {
@@ -268,7 +268,7 @@ public class RentalCompany {
 
   @Override
   public String toString() {
-    String frase = "Maneger: \n" + manager.getName();
+    String frase = "Manager: \n" + manager.getName();
     frase = frase + "Address: \n" + address;
     
     frase += "Carros: \n";

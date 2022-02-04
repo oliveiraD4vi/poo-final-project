@@ -175,7 +175,7 @@ public class Tenancy implements Comparable<Tenancy> {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append("\nLocation Contract | " + getId() + " | ");
+    stringBuffer.append("Location Contract | " + getId() + " | ");
 
     if (verifyStatus()) stringBuffer.append("OPEN");
     else stringBuffer.append("FINISHED");

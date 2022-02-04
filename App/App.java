@@ -20,8 +20,9 @@ class App {
     Manager manager = new Manager("Kevin", "04896138376", "kevinarruda@email.com", "888928292");
     RentalCompany company = new RentalCompany(1, manager, "Rua Pedro Alves Feitosa, 232 - Centro, Fortaleza - CE - Brasil");
 
-    if (!updateVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle()))
-      System.out.print("\n----reading file failed----\n");
+    updateClientsList(company.getClientsList());
+    updateVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
+    updateTenanciesList(company);
 
     // menu
     do {
@@ -262,6 +263,117 @@ class App {
 
     Collections.sort(company.getDisponibleCarList());
     Collections.sort(company.getDisponibleMotorcycle());
+  }
+
+  static boolean updateClientsList(List<Client> clients) {
+    String tempID;
+
+    try (
+        FileReader file = new FileReader("txtFiles/Clients.txt");
+        BufferedReader stream = new BufferedReader(file);
+    ) {
+      tempID = stream.readLine();
+
+      while(tempID != null) {
+        String tempName = stream.readLine();
+        String tempCPF = stream.readLine();
+        String tempEmail = stream.readLine();
+        String tempPhone = stream.readLine();
+
+        clients.add(new Client(tempName, tempCPF, tempEmail, tempPhone));
+
+        tempID = stream.readLine();
+      }
+
+      return true;
+    } catch(FileNotFoundException e) {
+      System.out.print("\nfail: no file was found to read\n");
+      return false;
+    } catch(IOException e) {
+      System.out.print("\nfail: there was a problem reading the file\n");
+      return false;
+    }
+  }
+
+  static boolean updateTenanciesList(RentalCompany company) {
+    String tempID;
+
+    try (
+        FileReader file = new FileReader("txtFiles/Tenancies.txt");
+        BufferedReader stream = new BufferedReader(file);
+    ) {
+      tempID = stream.readLine();
+
+      while(tempID != null) {
+        List<Car> cars = new ArrayList<Car>();
+        List<Motorcycle> motorcycles = new ArrayList<Motorcycle>();
+
+        String tempDay = stream.readLine();
+        String tempMonth = stream.readLine();
+        String tempYear = stream.readLine();
+
+        byte day = Byte.parseByte(tempDay);
+        byte month = Byte.parseByte(tempMonth);
+        short year = Short.parseShort(tempYear);
+
+        Date rentDate = new Date(day, month, year);
+
+        tempDay = stream.readLine();
+        tempMonth = stream.readLine();
+        tempYear = stream.readLine();
+
+        day = Byte.parseByte(tempDay);
+        month = Byte.parseByte(tempMonth);
+        year = Short.parseShort(tempYear);
+
+        Date devolutionDate = new Date(day, month, year);
+
+        Client client = null;
+        String tempCPF = stream.readLine();
+
+        for (Client item : company.getClientsList())
+          if (item.getCPF().equals(tempCPF)) client = item;
+
+        String tempStatus = stream.readLine();
+
+        String string = stream.readLine();
+        int number = Integer.parseInt(string);
+        if (number != 0) {
+          for (Car item : company.getDisponibleCarList())
+            if (item.getId() == number) cars.add(item);
+          for (Motorcycle item : company.getDisponibleMotorcycle())
+            if (item.getId() == number) motorcycles.add(item);
+        } 
+        
+        string = stream.readLine();
+        number = Integer.parseInt(string);
+        if (number != 0) {
+          for (Car item : company.getDisponibleCarList())
+            if (item.getId() == number) cars.add(item);
+          for (Motorcycle item : company.getDisponibleMotorcycle())
+            if (item.getId() == number) motorcycles.add(item);
+        }
+
+        int tempIntID = Integer.parseInt(tempID);
+
+        company.getTenanciesList().add(new Tenancy(tempIntID, rentDate, devolutionDate, client, cars, motorcycles));
+        Collections.sort(company.getTenanciesList());
+
+        if (tempStatus.equals("false"))
+          for (Tenancy item : company.getTenanciesList())
+            if (item.getId() == tempIntID) item.setStatus(false);
+
+        tempID = stream.readLine();
+      }
+
+      return true;
+    } catch(FileNotFoundException e) {
+      System.out.print("\nfail: no file was found to read\n");
+      return false;
+    } catch(IOException e) {
+      System.out.print("\nfail: there was a problem reading the file\n");
+      return false;
+    }
   }
 
   static boolean updateVehiclesList(List<Car> cars, List<Motorcycle> motorcycles) {

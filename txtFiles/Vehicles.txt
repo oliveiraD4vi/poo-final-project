@@ -1,13 +1,13 @@
 1
 C
-false
+true
 Chevrolet
 Onix
 Black
 MPX-9712
 2
 C
-false
+true
 Chevrolet
 Corsa
 Silver
@@ -91,7 +91,7 @@ Red
 HQO-0387
 14
 M
-false
+true
 Honda
 X-ADV
 Red

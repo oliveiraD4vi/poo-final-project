@@ -17,9 +17,7 @@ class App {
     char menuInput;
 
     // inicia a RentalCompany
-    Manager manager = new Manager("Kevin", "04896138376", "kevinarruda@email.com", "888928292");
-    RentalCompany company = new RentalCompany(1, manager, "Rua Pedro Alves Feitosa, 232 - Centro, Fortaleza - CE - Brasil");
-
+    RentalCompany company = updateRentalCompany();
     updateClientsList(company.getClientsList());
     updateVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
     updateTenanciesList(company);
@@ -263,6 +261,42 @@ class App {
 
     Collections.sort(company.getDisponibleCarList());
     Collections.sort(company.getDisponibleMotorcycle());
+  }
+
+  static RentalCompany updateRentalCompany() {
+    String tempID;
+    RentalCompany company = null;
+
+    try (
+        FileReader file = new FileReader("txtFiles/RentalCompany.txt");
+        BufferedReader stream = new BufferedReader(file);
+    ) {
+      tempID = stream.readLine();
+
+      while(tempID != null) {
+        String tempName = stream.readLine();
+        String tempCPF = stream.readLine();
+        String tempEmail = stream.readLine();
+        String tempPhone = stream.readLine();
+        
+        Manager manager = new Manager(tempName, tempCPF, tempEmail, tempPhone);
+
+        String tempAddress = stream.readLine();
+
+        RentalCompany aux = new RentalCompany(1, manager, tempAddress);
+        company = aux;
+
+        tempID = stream.readLine();
+      }
+
+      return company;
+    } catch(FileNotFoundException e) {
+      System.out.print("\nfail: no file was found to read\n");
+      return company;
+    } catch(IOException e) {
+      System.out.print("\nfail: there was a problem reading the file\n");
+      return company;
+    }
   }
 
   static boolean updateClientsList(List<Client> clients) {

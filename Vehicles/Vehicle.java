@@ -12,13 +12,21 @@
 
 package Vehicles;
 
+import Labels.Brand;
+import Labels.Color;
+
 abstract public class Vehicle {
+
+  // protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
+  // protected enum Brand {Fiat, Chevrolet, Volkswagen, Renault, Hyundai, Honda};
+  // protected enum Model {Corsa, Uno, Gol}
+
   protected int id;
   protected char type; //C or M
   protected String plate;
-  protected String brand;
   protected String model;
-  protected String color;
+  protected Brand brand;
+  protected Color color;
   protected boolean rented = false;
   protected float basePrice;
 
@@ -31,7 +39,7 @@ abstract public class Vehicle {
    * @param color é a cor do veículo
    * @param plate é a placa do veículo
    */
-  Vehicle (int id, String brand, String model, String color, String plate) {
+  Vehicle (int id, Brand brand, String model, Color color, String plate) {
     this.id = id;
     this.brand = brand;
     this.model = model;
@@ -105,7 +113,7 @@ abstract public class Vehicle {
    * @return brand
    */
   public String getBrand() {
-    return this.brand;
+    return this.brand.toString();
   }
 
   /**
@@ -121,7 +129,7 @@ abstract public class Vehicle {
    * @return color
    */
   public String getColor() {
-    return this.color;
+    return this.color.toString();
   }
 
   /**
@@ -139,12 +147,15 @@ abstract public class Vehicle {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append(getType() + "\n");
-    stringBuffer.append("ID: " + getId() + "\n");
-    stringBuffer.append("Placa: " + getPlate() + "\n");
-    stringBuffer.append(
-      getBrand() + " - " + getModel() + ", " + getColor() + "\n"
-    );
+    String symbol;
+    if (rented) symbol = "-";
+    else symbol = "+";
+
+    stringBuffer.append(symbol + " " + getType() + " Id: " + getId());
+    stringBuffer.append(" " + getBrand());
+    stringBuffer.append(" " + getModel());
+    stringBuffer.append(", " + getColor());
+    stringBuffer.append(" | "+ getPlate().toUpperCase());
 
     return stringBuffer.toString();
   }

@@ -258,6 +258,10 @@ public class RentalCompany {
     if(id >= 0) this.id = id;
   }
 
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
   public void setClientsList(ArrayList<Client> clientsList) {
     this.clientsList = clientsList;
   }

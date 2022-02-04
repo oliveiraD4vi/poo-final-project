@@ -17,44 +17,30 @@ class App {
     char menuInput;
 
     // inicia a RentalCompany
-    RentalCompany company = updateRentalCompany();
+    RentalCompany company = updateRentalCompany(input);
     updateClientsList(company.getClientsList());
     updateVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
     updateTenanciesList(company);
 
     // menu
     do {
-      System.out.println("\nVehicle Rental System - VRS");
-      System.out.println("\nMain actions");
-      System.out.println("1. Start a new tenancy");
-      System.out.println("2. Show tenancies historic");
-      System.out.println("3. Show clients historic");
-      System.out.println("4. Show vehicles");
+      System.out.print("\n---------------------------");
+      System.out.println("\nVehicle Rental System - VRS\n");
+      System.out.print("Manager: ");
+      System.out.println(company.getManager());
+      System.out.println(company.getAddress());
+      System.out.println("\nWhat do you want to do?");
+      System.out.println("1. Register rent (tenancy)");
+      System.out.println("2. Edit disponible data");
+      System.out.println("3. Edit company informations");
       System.out.println("0. Quit");
-      System.out.println("\nEdition actions");
-      System.out.println("5. Add new car");
-      System.out.println("6. Remove a car");
-      System.out.println("7. Add new motorcycle");
-      System.out.println("8. Remove a motorcycle");
-      System.out.println("9. Update an tenancy");
       System.out.print("\nOption: ");
-      menuInput = input.next().charAt(0);
+      menuInput = input.nextLine().charAt(0);
         
       switch(menuInput) {
-        case '1': startNewTenancy(company, input); break;
-        case '2': company.showTenancies(); break;
-        case '3': company.showClientsList(); break;
-        case '4': 
-          System.out.println("\n+ for available\n- for not available\n");
-          company.showCars();
-          System.out.println();
-          company.showMotorcycle();
-          break;
-        case '5': addVehicle(company, 'C', input); break;
-        case '6': removeVehicle(company, 'C', input); break;
-        case '7': addVehicle(company, 'M', input); break;
-        case '8': removeVehicle(company, 'M', input); break;
-        case '9': updateTenancy(company, input); break;
+        case '1': tenancyMenu(company, input, menuInput); break;
+        case '2': editMenu(company, input, menuInput);    break;
+        case '3': companyMenu(company, input, menuInput); break;
         case '0':
           writeRentalCompany(company);
           writeClientsList(company.getClientsList());
@@ -67,6 +53,107 @@ class App {
     } while (menuInput != '0');
 
     input.close();
+  }
+
+  static void tenancyMenu(RentalCompany company, Scanner input, char menuInput) {
+    do {
+      System.out.println("\nVehicle Rental System - VRS");
+      System.out.println("1. Start a new tenancy");
+      System.out.println("2. Show tenancies historic");
+      System.out.println("3. Show clients historic");
+      System.out.println("4. Show vehicles");
+      System.out.println("0. Return to main menu");
+      System.out.print("\nOption: ");
+      menuInput = input.nextLine().charAt(0);
+        
+      switch(menuInput) {
+        case '1': startNewTenancy(company, input); break;
+        case '2': company.showTenancies();         break;
+        case '3': company.showClientsList();       break;
+        case '4': 
+          System.out.println("\n+ for available\n- for not available\n");
+          company.showCars();
+          System.out.println();
+          company.showMotorcycle();
+          break;
+        case '0':
+          writeRentalCompany(company);
+          writeClientsList(company.getClientsList());
+          writeTenanciesList(company.getTenanciesList());
+          writeVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
+          System.out.print("\nreturning...\n");
+          break;
+        default : System.out.print("\n----invalid choice----\n");
+      }
+    } while (menuInput != '0');
+  }
+
+  static void companyMenu(RentalCompany company, Scanner input, char menuInput) {
+    do {
+      System.out.println("\nVehicle Rental System - VRS");
+      System.out.println("1. Change manager");
+      System.out.println("2. Change address");
+      System.out.println("0. Return to main menu");
+      System.out.print("\nOption: ");
+      menuInput = input.nextLine().charAt(0);
+        
+      switch(menuInput) {
+        case '1':
+          System.out.print("\nInsert manager name: ");
+          String tempName = input.nextLine();
+          System.out.print("Insert manager CPF: ");
+          String tempCPF = input.nextLine();
+          System.out.print("Insert manager email: ");
+          String tempEmail = input.nextLine();
+          System.out.print("Insert manager phone: ");
+          String tempPhone = input.nextLine();
+
+          Manager newManager = new Manager(tempName, tempCPF, tempEmail, tempPhone);
+
+          company.setManager(newManager);
+          System.out.print("\n----successful----\n");
+          break;
+        case '2': 
+          System.out.print("Insert the new address: ");
+          String newAddress = input.nextLine();
+          company.setAddress(newAddress);
+          System.out.print("\n----successful----\n");
+          break;
+        case '0':
+          writeRentalCompany(company);
+          System.out.print("\nreturning...\n");
+          break;
+        default : System.out.print("\n----invalid choice----\n");
+      }
+    } while (menuInput != '0');
+  }
+
+  static void editMenu(RentalCompany company, Scanner input, char menuInput) {
+    do {
+      System.out.println("\nVehicle Rental System - VRS");
+      System.out.println("1. Add new car");
+      System.out.println("2. Remove a car");
+      System.out.println("3. Add new motorcycle");
+      System.out.println("4. Remove a motorcycle");
+      System.out.println("5. Update an tenancy");
+      System.out.println("0. Return to main menu");
+      System.out.print("\nOption: ");
+      menuInput = input.nextLine().charAt(0);
+        
+      switch(menuInput) {
+        case '1': addVehicle(company, 'C', input);    break;
+        case '2': removeVehicle(company, 'C', input); break;
+        case '3': addVehicle(company, 'M', input);    break;
+        case '4': removeVehicle(company, 'M', input); break;
+        case '5': updateTenancy(company, input);      break;
+        case '0':
+          writeTenanciesList(company.getTenanciesList());
+          writeVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
+          System.out.print("\nreturning...\n");
+          break;
+        default : System.out.print("\n----invalid choice----\n");
+      }
+    } while (menuInput != '0');
   }
 
   static void addVehicle(RentalCompany company, char type, Scanner in) {
@@ -82,13 +169,13 @@ class App {
     id++;
 
     System.out.print("Brand: ");
-    String brand = in.next();
+    String brand = in.nextLine();
     System.out.print("Model: ");
-    String model = in.next();
+    String model = in.nextLine();
     System.out.print("Color: ");
-    String color = in.next();
+    String color = in.nextLine();
     System.out.print("Plate (format AAA-0000): ");
-    String plate = in.next();
+    String plate = in.nextLine();
 
     if (type == 'C') {
       Car newCar = new Car(id, brand, model, color, plate);
@@ -108,7 +195,7 @@ class App {
       if (company.getDisponibleCarList().size() != 0) {
         company.showCars();
         System.out.print("\nInsert the ID: ");
-        int removedId = in.nextInt();
+        int removedId = Integer.parseInt(in.nextLine());
         
         Car removedCar;
         for (int i = 0; i < company.getDisponibleCarList().size(); i++) {
@@ -126,7 +213,7 @@ class App {
       if (company.getDisponibleMotorcycle().size() != 0) {
         company.showMotorcycle();
         System.out.print("\nInsert the ID: ");
-        int removedId = in.nextInt();
+        int removedId = Integer.parseInt(in.nextLine());
         
         Motorcycle removedMotocycle;
         for (int i = 0; i < company.getDisponibleMotorcycle().size(); i++) {
@@ -152,7 +239,7 @@ class App {
       company.showTenancies();
 
       System.out.print("Insert the Id: ");
-      int updateId = in.nextInt();
+      int updateId = Integer.parseInt(in.nextLine());
 
       boolean idFound = false;
 
@@ -164,15 +251,15 @@ class App {
           System.out.print("\n1. Change devolution date");
           System.out.print("\n2. End tenancy");
           System.out.print("\n\nOption: ");
-          char userIn = in.next().charAt(0);
+          char userIn = in.nextLine().charAt(0);
 
           System.out.print("\nInsert devolution date");
           System.out.print("\nDay: ");
-          Byte tempDay = in.nextByte();
+          Byte tempDay = Byte.parseByte(in.nextLine());
           System.out.print("Month: ");
-          Byte tempMonth = in.nextByte();
+          Byte tempMonth = Byte.parseByte(in.nextLine());
           System.out.print("Year: ");
-          Short tempYear = in.nextShort();
+          Short tempYear = Short.parseShort(in.nextLine());
 
           Date finalDevolution = new Date(tempDay, tempMonth, tempYear);
 
@@ -207,7 +294,7 @@ class App {
 
       do {
         System.out.print("Insert the vehicle Id (0 for cancel): ");
-        dataInput = in.nextInt();
+        dataInput = Integer.parseInt(in.nextLine());
 
         if (dataInput == 0) break;
         
@@ -245,13 +332,13 @@ class App {
       } else {
         System.out.print("\nInsert client data\n");
         System.out.print("Nome: ");
-        String tempName = in.next();
+        String tempName = in.nextLine();
         System.out.print("CPF: ");
-        String tempCPF = in.next();
+        String tempCPF = in.nextLine();
         System.out.print("Email: ");
-        String tempEmail = in.next();
+        String tempEmail = in.nextLine();
         System.out.print("Fone: ");
-        String tempPhone = in.next();
+        String tempPhone = in.nextLine();
         System.out.println();
         
         Client client = new Client(tempName, tempCPF, tempEmail, tempPhone);
@@ -259,11 +346,11 @@ class App {
         
         System.out.print("Insert devolution date");
         System.out.print("\nDay: ");
-        Byte tempDay = in.nextByte();
+        Byte tempDay = Byte.parseByte(in.nextLine());
         System.out.print("Month: ");
-        Byte tempMonth = in.nextByte();
+        Byte tempMonth = Byte.parseByte(in.nextLine());
         System.out.print("Year: ");
-        Short tempYear = in.nextShort();
+        Short tempYear = Short.parseShort(in.nextLine());
         
         Date devolution = new Date(tempDay, tempMonth, tempYear);
 
@@ -280,7 +367,7 @@ class App {
     Collections.sort(company.getDisponibleMotorcycle());
   }
 
-  static RentalCompany updateRentalCompany() {
+  static RentalCompany updateRentalCompany(Scanner input) {
     String tempID;
     RentalCompany company = null;
 
@@ -309,10 +396,46 @@ class App {
       return company;
     } catch(FileNotFoundException e) {
       System.out.print("\nfail: no file was found to read\n");
-      return company;
+
+      System.out.print("\nInsert manager name: ");
+      String tempName = input.nextLine();
+      System.out.print("Insert manager CPF: ");
+      String tempCPF = input.nextLine();
+      System.out.print("Insert manager email: ");
+      String tempEmail = input.nextLine();
+      System.out.print("Insert manager phone: ");
+      String tempPhone = input.nextLine();
+
+      Manager newManager = new Manager(tempName, tempCPF, tempEmail, tempPhone);
+
+      System.out.print("\nInsert the address: ");
+      String newAddress = input.nextLine();
+      
+      RentalCompany aux = new RentalCompany(1, newManager, newAddress);
+
+      return aux;
     } catch(IOException e) {
       System.out.print("\nfail: there was a problem reading the file\n");
-      return company;
+      
+      System.out.print("\nfail: no file was found to read\n");
+
+      System.out.print("\nInsert manager name: ");
+      String tempName = input.nextLine();
+      System.out.print("Insert manager CPF: ");
+      String tempCPF = input.nextLine();
+      System.out.print("Insert manager email: ");
+      String tempEmail = input.nextLine();
+      System.out.print("Insert manager phone: ");
+      String tempPhone = input.nextLine();
+
+      Manager newManager = new Manager(tempName, tempCPF, tempEmail, tempPhone);
+
+      System.out.print("\nInsert the address: ");
+      String newAddress = input.nextLine();
+      
+      RentalCompany aux = new RentalCompany(1, newManager, newAddress);
+
+      return aux;
     }
   }
 

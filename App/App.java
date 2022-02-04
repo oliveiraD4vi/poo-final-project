@@ -414,7 +414,7 @@ class App {
         System.out.println();
         
         Client client = new Client(tempName, tempCPF, tempEmail, tempPhone);
-        Date presentDate = new Date((byte)5, (byte)2, (short)2021);
+        Date presentDate = new Date((byte)4, (byte)2, (short)2021);
         
         System.out.print("Insert devolution date");
         System.out.print("\nDay: ");

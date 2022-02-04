@@ -1,3 +1,11 @@
+/**
+ * A classe RentalCompany reprensenta uma locadora de veiculos, na qual temos informações 
+ * do tipo: gerente, endereço, clientes e veiculos disponiveis para aluguel, alem disso
+ * é possivel alugar/desalugar um veiculo e mostrar as informações presente nessa clase.
+ * @author Davi Oliveira | Robson Diógenes
+ * @version 1.0 data: 04/02/2022
+ */
+
 package RentalCompany;
 
 import java.util.*;
@@ -243,6 +251,7 @@ public class RentalCompany {
     return date;
   }
 
+  //gets e sets
   public int getId() {
     return id;
   }
@@ -287,6 +296,9 @@ public class RentalCompany {
     this.manager = manager;
   }
 
+  /**
+   * @return retorna uma string formata com as informações do objeto da classe RentalCompany
+   */
   @Override
   public String toString() {
     String frase = "Manager: \n" + manager.getName();

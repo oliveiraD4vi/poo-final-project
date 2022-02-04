@@ -131,6 +131,14 @@ public class Tenancy implements Comparable<Tenancy> {
     return id;
   }
 
+  public List<Car> getCars() {
+    return cars;
+  }
+
+  public List<Motorcycle> getMotorcycles() {
+    return motorcycles;
+  }
+
   /**
    * O método getRentDate retorna o objeto Date com 
    * a data de alguel dos veículos
@@ -167,11 +175,15 @@ public class Tenancy implements Comparable<Tenancy> {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append("\nLocation Contract | " + getId());
-    stringBuffer.append("\nClient informations:\n " + getClient());
-    stringBuffer.append("\n\nRent date: " + getRentDate());
-    stringBuffer.append("\nDevolution date: " + getDevolutionDate());
-    stringBuffer.append("\n\nRented vehicles:\n\n");
+    stringBuffer.append("Location Contract | " + getId() + " | ");
+
+    if (verifyStatus()) stringBuffer.append("OPEN");
+    else stringBuffer.append("FINISHED");
+
+    stringBuffer.append("\nClient: " + getClient());
+    stringBuffer.append("\nRent date: " + getRentDate());
+    stringBuffer.append(" Devolution date: " + getDevolutionDate());
+    stringBuffer.append("\nRented vehicles:\n");
 
     if (cars.size() != 0)
       for (int i = 0; i<cars.size(); i++)
@@ -180,6 +192,8 @@ public class Tenancy implements Comparable<Tenancy> {
     if (motorcycles.size() != 0)
       for (int i = 0; i<motorcycles.size(); i++)
         stringBuffer.append(motorcycles.get(i) + "\n");
+
+    stringBuffer.append("Rent value: R$" + calculateRentValue() + "\n");
 
     return stringBuffer.toString();
   }

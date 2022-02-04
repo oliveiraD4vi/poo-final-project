@@ -12,19 +12,20 @@
 
 package Vehicles;
 
+import Labels.Brand;
+import Labels.Color;
 
 abstract public class Vehicle {
 
-  protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
-  protected enum Type {C, M};
-  protected enum Brand {Fiat, Chevroletc, Volkswagen, Renault, Hyundai};
-  
+  // protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
+  // protected enum Brand {Fiat, Chevrolet, Volkswagen, Renault, Hyundai, Honda};
+  // protected enum Model {Corsa, Uno, Gol}
 
   protected int id;
-  protected Type type; //C or M
+  protected char type; //C or M
   protected String plate;
-  protected Brand brand;
   protected String model;
+  protected Brand brand;
   protected Color color;
   protected boolean rented = false;
   protected float basePrice;
@@ -38,11 +39,11 @@ abstract public class Vehicle {
    * @param color é a cor do veículo
    * @param plate é a placa do veículo
    */
-  Vehicle (int id, String brand, String model, String color, String plate) {
+  Vehicle (int id, Brand brand, String model, Color color, String plate) {
     this.id = id;
-    this.brand = Brand.valueOf(brand);
+    this.brand = brand;
     this.model = model;
-    this.color = Color.valueOf(color);
+    this.color = color;
     this.plate = plate;
   }
   
@@ -78,8 +79,8 @@ abstract public class Vehicle {
    * O método setType seta o tipo de veículo
    * @param type é o tipo a ser setado (C ou M)
    */
-  public void setType(String type) {
-    this.type = Type.valueOf(type);
+  public void setType(char type) {
+    this.type = type;
   }
 
   /**
@@ -103,8 +104,8 @@ abstract public class Vehicle {
    * O método getType retorna o tipo do veículo
    * @return type
    */
-  public String getType() {
-    return this.type.toString();
+  public char getType() {
+    return this.type;
   }
 
   /**
@@ -146,14 +147,16 @@ abstract public class Vehicle {
   public String toString() {
     StringBuffer stringBuffer = new StringBuffer();
 
-    stringBuffer.append(getType() + "\n");
-    stringBuffer.append("ID: " + getId() + " | " + getPlate().toUpperCase() + "\n");
-    stringBuffer.append(getBrand() + " - " + getModel() + ", " + getColor() + "\n");
+    String symbol;
+    if (rented) symbol = "-";
+    else symbol = "+";
+
+    stringBuffer.append(symbol + " " + getType() + " Id: " + getId());
+    stringBuffer.append(" " + getBrand());
+    stringBuffer.append(" " + getModel());
+    stringBuffer.append(", " + getColor());
+    stringBuffer.append(" | "+ getPlate().toUpperCase());
 
     return stringBuffer.toString();
   }
-
-  
 }
-
-

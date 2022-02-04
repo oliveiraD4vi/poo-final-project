@@ -1,6 +1,7 @@
 package App;
 
 import Date.Date;
+import Labels.*;
 import java.io.*;
 import Persons.*;
 import Vehicles.*;
@@ -169,20 +170,42 @@ class App {
     id++;
 
     System.out.print("Brand: ");
-    String brand = in.nextLine();
+    String tempBrand = in.nextLine();
     System.out.print("Model: ");
-    String model = in.nextLine();
+    String tempModel = in.nextLine();
     System.out.print("Color: ");
-    String color = in.nextLine();
+    String tempColor = in.nextLine();
     System.out.print("Plate (format AAA-0000): ");
     String plate = in.nextLine();
 
-    if (type == 'C') {
-      Car newCar = new Car(id, brand, model, color, plate);
-      company.addCar(newCar);
-    } else if (type == 'M') {
-      Motorcycle newMotorcycle = new Motorcycle(id, brand, model, color, plate);
-      company.addMotorcycle(newMotorcycle);
+    boolean brandFound = false;
+    Brand brand = Brand.chevrolet;
+
+    for (Brand item : Brand.values())
+      if (item.getName().toLowerCase().equals(tempBrand.toLowerCase())) {
+        brandFound = true;
+        brand = item;
+      }
+
+    boolean colorFound = false;
+    Color color = Color.black;
+
+    for (Color item : Color.values())
+      if (item.getName().toLowerCase().equals(tempColor.toLowerCase())) {
+        colorFound = true;
+        color = item;
+      }
+
+    if (brandFound && colorFound) {
+      if (type == 'C') {
+        Car newCar = new Car(id, brand, tempModel, color, plate);
+        company.addCar(newCar);
+      } else if (type == 'M') {
+        Motorcycle newMotorcycle = new Motorcycle(id, brand, tempModel, color, plate);
+        company.addMotorcycle(newMotorcycle);
+      }
+    } else {
+      System.out.println("fail: invalid color or brand");
     }
   }
 
@@ -640,23 +663,45 @@ class App {
 
         int tempIntID = Integer.parseInt(tempID);
 
-        if (type.equals("C")) {
-          cars.add(new Car(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
-          Collections.sort(cars);
+        boolean brandFound = false;
+        Brand brand = Brand.chevrolet;
+
+        for (Brand item : Brand.values())
+          if (item.getName().toLowerCase().equals(tempBrand.toLowerCase())) {
+            brandFound = true;
+            brand = item;
+          }
+
+        boolean colorFound = false;
+        Color color = Color.black;
+
+        for (Color item : Color.values())
+          if (item.getName().toLowerCase().equals(tempColor.toLowerCase())) {
+            colorFound = true;
+            color = item;
+          }
+
+        if (brandFound && colorFound) {
+          if (type.equals("C")) {
+            cars.add(new Car(tempIntID, brand, tempModel, color, tempPlate));
+            Collections.sort(cars);
+            
+            if (tempRented.equals("true")) 
+              for (Car item : cars)
+                if (item.getId() == tempIntID)
+                  item.setRented(true);
+          }
+          else if (type.equals("M")) {
+            motorcycles.add(new Motorcycle(tempIntID, brand, tempModel, color, tempPlate));
+            Collections.sort(motorcycles);
           
-          if (tempRented.equals("true")) 
-            for (Car item : cars)
-              if (item.getId() == tempIntID)
-                item.setRented(true);
-        }
-        else if (type.equals("M")) {
-          motorcycles.add(new Motorcycle(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
-          Collections.sort(motorcycles);
-        
-          if (tempRented.equals("true")) 
-            for (Motorcycle item : motorcycles)
-              if (item.getId() == tempIntID)
-                item.setRented(true);
+            if (tempRented.equals("true")) 
+              for (Motorcycle item : motorcycles)
+                if (item.getId() == tempIntID)
+                  item.setRented(true);
+          }
+        } else {
+          System.out.println("fail: invalid color or brand");
         }
 
         tempID = stream.readLine();

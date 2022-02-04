@@ -11,6 +11,9 @@
 
 package Vehicles;
 
+import Labels.Brand;
+import Labels.Color;
+
 public class Motorcycle extends Vehicle implements Comparable<Motorcycle> {
   /**
    * O método Construtor da classe seta os valores iniciais do
@@ -22,7 +25,7 @@ public class Motorcycle extends Vehicle implements Comparable<Motorcycle> {
    * @param color é a cor da moto
    * @param plate é a placa da moto
    */
-  public Motorcycle (int id, String brand, String model, String color, String plate) {
+  public Motorcycle (int id, Brand brand, String model, Color color, String plate) {
     super(id, brand, model, color, plate);
     setType('M');
     setBasePrice((float)12.5);

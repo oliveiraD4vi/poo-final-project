@@ -7,7 +7,7 @@ Black
 MPX-9712
 2
 C
-false
+true
 Chevrolet
 Corsa
 Silver
@@ -89,6 +89,13 @@ Volkswagen
 Fox
 Red
 HQO-0387
+19
+C
+false
+Volkswagen
+Gol
+White
+ghj-9877
 14
 M
 false
@@ -124,10 +131,3 @@ Yamaha
 XMax 250
 Red
 JNG-5542
-19
-M
-false
-BMW
-R 1200 GS
-Silver
-MYZ-2285

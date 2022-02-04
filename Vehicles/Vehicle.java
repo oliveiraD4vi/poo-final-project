@@ -12,6 +12,9 @@
 
 package Vehicles;
 
+import Labels.Brand;
+import Labels.Color;
+
 abstract public class Vehicle {
 
   // protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
@@ -21,9 +24,9 @@ abstract public class Vehicle {
   protected int id;
   protected char type; //C or M
   protected String plate;
-  protected String brand;
   protected String model;
-  protected String color;
+  protected Brand brand;
+  protected Color color;
   protected boolean rented = false;
   protected float basePrice;
 
@@ -36,7 +39,7 @@ abstract public class Vehicle {
    * @param color é a cor do veículo
    * @param plate é a placa do veículo
    */
-  Vehicle (int id, String brand, String model, String color, String plate) {
+  Vehicle (int id, Brand brand, String model, Color color, String plate) {
     this.id = id;
     this.brand = brand;
     this.model = model;

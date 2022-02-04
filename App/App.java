@@ -12,7 +12,6 @@ class App {
   public static void main(String[] args) {
     Locale.setDefault(Locale.US);
     Scanner input = new Scanner(System.in);
-    int idCounter = 0;
 
     // variavel que guarda o input do usuário
     char menuInput;
@@ -21,13 +20,8 @@ class App {
     Manager manager = new Manager("Kevin", "04896138376", "kevinarruda@email.com", "888928292");
     RentalCompany company = new RentalCompany(1, manager, "Rua Pedro Alves Feitosa, 232 - Centro, Fortaleza - CE - Brasil");
 
-    boolean updateCar = updateCarsList(company.getDisponibleCarList());
-    boolean updateMoto = updateMotorcyclesList(company.getDisponibleMotorcycle());
-
-    if (!updateCar && !updateMoto)
+    if (!updateVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle()))
       System.out.print("\n----reading file failed----\n");
-    else idCounter =
-        company.getDisponibleCarList().size() + company.getDisponibleMotorcycle().size();
 
     // menu
     do {
@@ -53,15 +47,19 @@ class App {
         case '3': company.showClientsList(); break;
         case '4': 
           System.out.println("\n+ for available\n- for not available\n");
-          company.showCars(); 
+          company.showCars();
+          System.out.println();
           company.showMotorcycle();
           break;
-        case '5': addVehicle(company, 'C', idCounter, input); break;
-        case '6': removeVehicle(company, 'C', idCounter, input); break;
-        case '7': addVehicle(company, 'M', idCounter, input); break;
-        case '8': removeVehicle(company, 'M', idCounter, input); break;
+        case '5': addVehicle(company, 'C', input); break;
+        case '6': removeVehicle(company, 'C', input); break;
+        case '7': addVehicle(company, 'M', input); break;
+        case '8': removeVehicle(company, 'M', input); break;
         case '9': updateTenancy(company, input); break;
-        case '0': System.out.print("\nleaving...\n"); break;
+        case '0': 
+          writeVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
+          System.out.print("\nleaving...\n");
+          break;
         default : System.out.print("\n----invalid choice----\n");
       }
     } while (menuInput != '0');
@@ -69,8 +67,16 @@ class App {
     input.close();
   }
 
-  static void addVehicle(RentalCompany company, char type, int id, Scanner in) {
+  static void addVehicle(RentalCompany company, char type, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
+
+    int id = 0;
+    
+    for (Car item : company.getDisponibleCarList())
+      if (item.getId() > id) id = item.getId();
+    for (Motorcycle item : company.getDisponibleMotorcycle())
+      if (item.getId() > id) id = item.getId();
+
     id++;
 
     System.out.print("Brand: ");
@@ -91,7 +97,7 @@ class App {
     }
   }
 
-  static void removeVehicle(RentalCompany company, char type, int id, Scanner in) {
+  static void removeVehicle(RentalCompany company, char type, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
     boolean idFound = false;
@@ -176,6 +182,7 @@ class App {
       System.out.println("Veículos disponíveis:");
       System.out.println("\n+ for available\n- for not available\n");
       company.showCars();
+      System.out.println();
       company.showMotorcycle();
       
       int dataInput;
@@ -252,32 +259,50 @@ class App {
           System.out.print("\n----Failed----\n");
       }
     }
+
+    Collections.sort(company.getDisponibleCarList());
+    Collections.sort(company.getDisponibleMotorcycle());
   }
 
-  static boolean updateCarsList(List<Car> disponibleVehicles) {
-    int tempIntID;
+  static boolean updateVehiclesList(List<Car> cars, List<Motorcycle> motorcycles) {
     String tempID;
-    String tempBrand;
-    String tempModel;
-    String tempColor;
-    String tempPlate;
 
     try (
-        FileReader carFile = new FileReader("txtFiles/Cars.txt");
-        BufferedReader carStream = new BufferedReader(carFile);
+        FileReader file = new FileReader("txtFiles/Vehicles.txt");
+        BufferedReader stream = new BufferedReader(file);
     ) {
-      tempID = carStream.readLine();
+      tempID = stream.readLine();
 
       while(tempID != null) {
-        tempBrand = carStream.readLine();
-        tempModel = carStream.readLine();
-        tempColor = carStream.readLine();
-        tempPlate = carStream.readLine();
+        String type = stream.readLine();
+        String tempRented = stream.readLine();
+        String tempBrand = stream.readLine();
+        String tempModel = stream.readLine();
+        String tempColor = stream.readLine();
+        String tempPlate = stream.readLine();
 
-        tempIntID = Integer.parseInt(tempID);
+        int tempIntID = Integer.parseInt(tempID);
 
-        disponibleVehicles.add(new Car(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
-        tempID = carStream.readLine();
+        if (type.equals("C")) {
+          cars.add(new Car(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
+          Collections.sort(cars);
+          
+          if (tempRented.equals("true")) 
+            for (Car item : cars)
+              if (item.getId() == tempIntID)
+                item.setRented(true);
+        }
+        else if (type.equals("M")) {
+          motorcycles.add(new Motorcycle(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
+          Collections.sort(motorcycles);
+        
+          if (tempRented.equals("true")) 
+            for (Motorcycle item : motorcycles)
+              if (item.getId() == tempIntID)
+                item.setRented(true);
+        }
+
+        tempID = stream.readLine();
       }
 
       return true;
@@ -290,72 +315,29 @@ class App {
     }
   }
 
-  static boolean updateMotorcyclesList(List<Motorcycle> disponibleVehicles) {
-    int tempIntID;
-    String tempID;
-    String tempBrand;
-    String tempModel;
-    String tempColor;
-    String tempPlate;
-
+  static void writeVehiclesList(List<Car> cars, List<Motorcycle> motorcycles) {
     try (
-        FileReader motoFile = new FileReader("txtFiles/Motorcycles.txt");
-        BufferedReader motoStream = new BufferedReader(motoFile);
+      FileWriter file = new FileWriter("txtFiles/Vehicles.txt");
+      PrintWriter writer = new PrintWriter(file);
     ) {
-      tempID = motoStream.readLine();
-
-      while(tempID != null) {
-        tempBrand = motoStream.readLine();
-        tempModel = motoStream.readLine();
-        tempColor = motoStream.readLine();
-        tempPlate = motoStream.readLine();
-
-        tempIntID = Integer.parseInt(tempID);
-
-        disponibleVehicles.add(new Motorcycle(tempIntID, tempBrand, tempModel, tempColor, tempPlate));
-        tempID = motoStream.readLine();
+      for(Car item : cars) {
+        writer.println(item.getId());
+        writer.println(item.getType());
+        writer.println(item.verifyCondition());
+        writer.println(item.getBrand());
+        writer.println(item.getModel());
+        writer.println(item.getColor());
+        writer.println(item.getPlate());
       }
 
-      return true;
-    } catch(FileNotFoundException e) {
-      System.out.print("\nfail: no file was found to read\n");
-      return false;
-    } catch(IOException e) {
-      System.out.print("\nfail: there was a problem reading the file\n");
-      return false;
-    }
-  }
-
-  // testing
-  static void writeCarsList(List<Car> disponibleCar) {
-    try (
-      FileWriter carFile = new FileWriter("txtFiles/Cars.txt");
-      PrintWriter carWriter = new PrintWriter(carFile);
-    ) {
-      for(Car item : disponibleCar) {
-        carWriter.println(item.getId());
-        carWriter.println(item.getBrand());
-        carWriter.println(item.getModel());
-        carWriter.println(item.getColor());
-        carWriter.println(item.getPlate());
-      }
-    } catch(IOException e) {
-      System.out.println("fail: there was a problem writing the file");
-    }
-  }
-
-  // testing
-  static void writeMotorcyclesList(List<Motorcycle> disponibleMotorcycle) {
-    try (
-      FileWriter motoFile = new FileWriter("txtFiles/Motorcycles.txt");
-      PrintWriter motoWriter = new PrintWriter(motoFile);
-    ) {
-      for(Motorcycle item : disponibleMotorcycle) {
-        motoWriter.println(item.getId());
-        motoWriter.println(item.getBrand());
-        motoWriter.println(item.getModel());
-        motoWriter.println(item.getColor());
-        motoWriter.println(item.getPlate());
+      for(Motorcycle item : motorcycles) {
+        writer.println(item.getId());
+        writer.println(item.getType());
+        writer.println(item.verifyCondition());
+        writer.println(item.getBrand());
+        writer.println(item.getModel());
+        writer.println(item.getColor());
+        writer.println(item.getPlate());
       }
     } catch(IOException e) {
       System.out.println("fail: there was a problem writing the file");

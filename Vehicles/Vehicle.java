@@ -12,20 +12,18 @@
 
 package Vehicles;
 
-
 abstract public class Vehicle {
 
-  protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
-  protected enum Type {C, M};
-  protected enum Brand {Fiat, Chevroletc, Volkswagen, Renault, Hyundai};
-  
+  // protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
+  // protected enum Brand {Fiat, Chevrolet, Volkswagen, Renault, Hyundai, Honda};
+  // protected enum Model {Corsa, Uno, Gol}
 
   protected int id;
-  protected Type type; //C or M
+  protected char type; //C or M
   protected String plate;
-  protected Brand brand;
+  protected String brand;
   protected String model;
-  protected Color color;
+  protected String color;
   protected boolean rented = false;
   protected float basePrice;
 
@@ -40,9 +38,9 @@ abstract public class Vehicle {
    */
   Vehicle (int id, String brand, String model, String color, String plate) {
     this.id = id;
-    this.brand = Brand.valueOf(brand);
+    this.brand = brand;
     this.model = model;
-    this.color = Color.valueOf(color);
+    this.color = color;
     this.plate = plate;
   }
   
@@ -78,8 +76,8 @@ abstract public class Vehicle {
    * O método setType seta o tipo de veículo
    * @param type é o tipo a ser setado (C ou M)
    */
-  public void setType(String type) {
-    this.type = Type.valueOf(type);
+  public void setType(char type) {
+    this.type = type;
   }
 
   /**
@@ -103,8 +101,8 @@ abstract public class Vehicle {
    * O método getType retorna o tipo do veículo
    * @return type
    */
-  public String getType() {
-    return this.type.toString();
+  public char getType() {
+    return this.type;
   }
 
   /**
@@ -158,8 +156,4 @@ abstract public class Vehicle {
 
     return stringBuffer.toString();
   }
-
-  
 }
-
-

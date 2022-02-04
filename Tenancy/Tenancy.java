@@ -193,6 +193,8 @@ public class Tenancy implements Comparable<Tenancy> {
       for (int i = 0; i<motorcycles.size(); i++)
         stringBuffer.append(motorcycles.get(i) + "\n");
 
+    stringBuffer.append("Rent value: R$" + calculateRentValue() + "\n");
+
     return stringBuffer.toString();
   }
 }

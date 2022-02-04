@@ -148,6 +148,10 @@ public class RentalCompany {
     }
   }   
 
+  /**
+   * O método showCars mostra todos os carros na lista
+   * de carros disponíveis
+   */
   public void showCars(){
     if (disponibleCarList.size() == 0)
       System.out.println("No available cars");
@@ -155,6 +159,10 @@ public class RentalCompany {
       for(int i = 0; i < disponibleCarList.size(); i++) System.out.println(disponibleCarList.get(i));
   }
 
+  /**
+   * O método showMotorcycle mostra todos as motos na lista
+   * de motos disponíveis
+   */
   public void showMotorcycle(){
     if (disponibleMotorcycle.size() == 0)
       System.out.println("No available motorcycles");
@@ -162,6 +170,10 @@ public class RentalCompany {
       for(int i = 0; i < disponibleMotorcycle.size(); i++) System.out.println(disponibleMotorcycle.get(i));
   }
 
+  /**
+   * O método showTenancies mostra todos os contratos de aluguel na lista
+   * de tenancies já feitas
+   */
   public void showTenancies(){
     System.out.println("\nRents:");
     if (tenanciesList.size() == 0)
@@ -169,6 +181,11 @@ public class RentalCompany {
     else
       for(int i = 0; i < tenanciesList.size(); i++) System.out.println(tenanciesList.get(i));
   }
+
+  /**
+   * O método showClientList mostra todos os clientes na lista
+   * de clientes
+   */
   public void showClientsList(){
     System.out.println("\nClients:");
     if (tenanciesList.size() == 0)

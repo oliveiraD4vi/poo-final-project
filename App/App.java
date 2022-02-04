@@ -55,7 +55,10 @@ class App {
         case '7': addVehicle(company, 'M', input); break;
         case '8': removeVehicle(company, 'M', input); break;
         case '9': updateTenancy(company, input); break;
-        case '0': 
+        case '0':
+          writeRentalCompany(company);
+          writeClientsList(company.getClientsList());
+          writeTenanciesList(company.getTenanciesList());
           writeVehiclesList(company.getDisponibleCarList(), company.getDisponibleMotorcycle());
           System.out.print("\nleaving...\n");
           break;
@@ -299,6 +302,23 @@ class App {
     }
   }
 
+  static void writeRentalCompany(RentalCompany company) {
+    try (
+      FileWriter file = new FileWriter("txtFiles/RentalCompany.txt");
+      PrintWriter writer = new PrintWriter(file);
+    ) {
+      writer.println("test");
+      writer.println(1);
+      writer.println(company.getManager().getName());
+      writer.println(company.getManager().getCPF());
+      writer.println(company.getManager().getEmail());
+      writer.println(company.getManager().getPhone());
+      writer.println(company.getAddress());
+    } catch(IOException e) {
+      System.out.println("fail: there was a problem writing the file");
+    }
+  }
+
   static boolean updateClientsList(List<Client> clients) {
     String tempID;
 
@@ -326,6 +346,26 @@ class App {
     } catch(IOException e) {
       System.out.print("\nfail: there was a problem reading the file\n");
       return false;
+    }
+  }
+
+  static void writeClientsList(List<Client> clients) {
+    try (
+      FileWriter file = new FileWriter("txtFiles/Clients.txt");
+      PrintWriter writer = new PrintWriter(file);
+    ) {
+      int id = 1;
+
+      for(Client item : clients) {
+        writer.println(id);
+        writer.println(item.getName());
+        writer.println(item.getCPF());
+        writer.println(item.getEmail());
+        writer.println(item.getPhone());
+        id++;
+      }
+    } catch(IOException e) {
+      System.out.println("fail: there was a problem writing the file");
     }
   }
 
@@ -407,6 +447,41 @@ class App {
     } catch(IOException e) {
       System.out.print("\nfail: there was a problem reading the file\n");
       return false;
+    }
+  }
+
+  static void writeTenanciesList(List<Tenancy> tenancies) {
+    try (
+      FileWriter file = new FileWriter("txtFiles/Tenancies.txt");
+      PrintWriter writer = new PrintWriter(file);
+    ) {
+      for(Tenancy item : tenancies) {
+        writer.println(item.getId());
+        writer.println(item.getRentDate().getDay());
+        writer.println(item.getRentDate().getMonth());
+        writer.println(item.getRentDate().getYear());
+        writer.println(item.getDevolutionDate().getDay());
+        writer.println(item.getDevolutionDate().getMonth());
+        writer.println(item.getDevolutionDate().getYear());
+        writer.println(item.getClient().getCPF());
+        writer.println(item.verifyStatus());
+
+        if (item.getCars().size()+item.getMotorcycles().size() == 1) {
+          for (Car car : item.getCars())
+            writer.println(car.getId());
+          for (Motorcycle moto : item.getMotorcycles())
+            writer.println(moto.getId());
+
+          writer.println(0);
+        } else {
+          for (Car car : item.getCars())
+            writer.println(car.getId());
+          for (Motorcycle moto : item.getMotorcycles())
+            writer.println(moto.getId());
+        }
+      }
+    } catch(IOException e) {
+      System.out.println("fail: there was a problem writing the file");
     }
   }
 

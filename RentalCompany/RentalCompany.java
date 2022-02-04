@@ -10,7 +10,6 @@ import Vehicles.Motorcycle;
 //classe locadora
 public class RentalCompany {
   private int id;
-  private int idRental;
   private String address;
   private Manager manager;
   private List<Car> disponibleCarList = new ArrayList<Car>();
@@ -86,7 +85,7 @@ public class RentalCompany {
    * @param dataEntrega é a data de entrega dos veiculos
    * @return retorna true caso ocorra o aluguel, false caso não
    */
-  public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client client, Date dataAtual, Date dataEntrega){
+  public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client client, Date dataAtual, Date dataEntrega, int idRental){
     boolean verifyTenancies = false;
     
     for (Tenancy item : tenanciesList)

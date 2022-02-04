@@ -254,8 +254,10 @@ class App {
         Short tempYear = in.nextShort();
         
         Date devolution = new Date(tempDay, tempMonth, tempYear);
+
+        int id = company.getTenanciesList().size();
         
-        if (company.rentVehicle(cars, motorcycles, client, presentDate, devolution))
+        if (company.rentVehicle(cars, motorcycles, client, presentDate, devolution, id))
           System.out.print("\n----Succesful Transaction----\n");
         else
           System.out.print("\n----Failed----\n");
@@ -307,7 +309,6 @@ class App {
       FileWriter file = new FileWriter("txtFiles/RentalCompany.txt");
       PrintWriter writer = new PrintWriter(file);
     ) {
-      writer.println("test");
       writer.println(1);
       writer.println(company.getManager().getName());
       writer.println(company.getManager().getCPF());

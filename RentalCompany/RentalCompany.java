@@ -18,6 +18,11 @@ public class RentalCompany {
   private List<Tenancy> tenanciesList = new ArrayList<Tenancy>();
   private List<Client> clientsList = new ArrayList<Client>();
 
+  /**O método Construtor recebe parâmetros para setar nos atributos
+   * @param id é id da locadora
+   * @param ManegerName é o gerente da locadora
+   * @param address é o endereço da locadora 
+   */
   public RentalCompany(int id, Manager manager, String address){
     if (id > 0){
       this.id = id;
@@ -26,10 +31,20 @@ public class RentalCompany {
     } else System.out.println("fail: invalid data");
   }
 
+  /**
+   * O metodo addCar adiciona um carro na locadora para aluguel
+   * @param car é o carro a ser adicionado;
+   */
   public void addCar(Car car){
     disponibleCarList.add(car);
+    Collections.sort(disponibleCarList);
   }
 
+  /**
+   * O metodo removeCar remove um carro da locadora
+   * @param car é o carro a ser removido
+   * @return retorna um booleano, true caso o carro seja removido, false caso o carro não seja removido
+   */
   public boolean removeCar(Car car){
     if (disponibleCarList.remove(car))
       return true;
@@ -39,10 +54,20 @@ public class RentalCompany {
     }
   }
 
+  /**
+   * O metodo addMotorcycle adiciona uma moto na locadora para aluguel
+   * @param moto é a moto a ser adicionada
+   */
   public void addMotorcycle(Motorcycle moto){
     disponibleMotorcycle.add(moto);
+    Collections.sort(disponibleMotorcycle);
   }
 
+  /**
+   * O metodo removeMotorcycle remove uma moto da locadora
+   * @param moto é a moto a ser removida
+   * @return retorna true caso a moto seja rempvida e false caso não
+   */
   public boolean removeMotorcycle(Motorcycle moto){
     if (disponibleMotorcycle.remove(moto))
       return true;
@@ -52,6 +77,15 @@ public class RentalCompany {
     }
   }
 
+  /**
+   * O metodo rentVehicle aluga carros e/ou motos
+   * @param cars é uma lista dos carros a serem alugados
+   * @param motos é uma lista de motos a serem alugados
+   * @param cliente é o cliente que vai alugar os veiculos
+   * @param dataAtual é a data do aluguel
+   * @param dataEntrega é a data de entrega dos veiculos
+   * @return retorna true caso ocorra o aluguel, false caso não
+   */
   public boolean rentVehicle(List<Car> cars, List<Motorcycle> motos,  Client client, Date dataAtual, Date dataEntrega){
     boolean verifyTenancies = false;
     
@@ -85,9 +119,14 @@ public class RentalCompany {
             }
           }
         }
+
+        Collections.sort(cars);
+        Collections.sort(motos);
         
         Tenancy rent = new Tenancy(idRental, dataAtual, dataEntrega, client, cars, motos);
         tenanciesList.add(rent);
+
+        Collections.sort(tenanciesList);
 
         boolean clientExist = false;
 
@@ -97,7 +136,10 @@ public class RentalCompany {
             break;
           }
 
-        if (!clientExist) clientsList.add(client);
+        if (!clientExist) {
+          clientsList.add(client);
+          Collections.sort(clientsList);
+        }
         
         return true;
       } else {
@@ -136,6 +178,12 @@ public class RentalCompany {
       for(int i = 0; i < clientsList.size(); i++) System.out.println(clientsList.get(i));
   }
 
+  /**
+   * Termina um aluguel de veiculo
+   * @param tenancy é o aluguel a ser encerrado 
+   * @param date é a data em que o contrado foi encerrado
+   * @return retorna true caso contrato seja encerrado, false caso não
+   */
   public boolean endTenancie(Tenancy tenancy, Date date){
     boolean test = tenanciesList.remove(tenancy);
 
@@ -162,6 +210,12 @@ public class RentalCompany {
     }
   }
 
+  /**
+   * Muda daata de vencimento do aluguel
+   * @param tenancy é o aluguel que terá a data modificada
+   * @param date é a nova data de vencimento
+   * @return retorna a nova data
+   */
   public Date changeDate(Tenancy tenancy, Date date){
     boolean teste = tenanciesList.remove(tenancy);
 
@@ -207,5 +261,57 @@ public class RentalCompany {
 
   public void setClientsList(ArrayList<Client> clientsList) {
     this.clientsList = clientsList;
+  }
+
+  public void setManager(Manager manager) {
+    this.manager = manager;
+  }
+
+  @Override
+  public String toString() {
+    String frase = "Maneger: \n" + manager.getName();
+    frase = frase + "Address: \n" + address;
+    
+    frase += "Carros: \n";
+    if(disponibleCarList.size() == 0){
+      frase += "Sem carros.\n";
+    }else{
+      for(int i = 0; i < disponibleCarList.size(); i++){
+        frase += disponibleCarList.get(i);
+        frase +="\n";
+      }
+    }
+
+    frase += "Motos: \n";
+    if(disponibleMotorcycle.size() == 0){
+      frase += "Sem motos.\n";
+    }else{
+      for(int i = 0; i < disponibleMotorcycle.size(); i++){
+        frase += disponibleMotorcycle.get(i);
+        frase += "\n";
+      }
+    }
+
+    frase += "Alocações: \n";
+    if(tenanciesList.size() == 0){
+      frase += "Sem alocações.\n";
+    }else{
+      for(int i = 0; i < tenanciesList.size(); i++){
+        frase += tenanciesList.get(i);
+        frase += "\n";
+      }
+    }
+    
+    frase += "Clientes: \n";
+    if(tenanciesList.size() == 0){
+      frase += "Sem Clientes.\n";
+    }else{
+      for(int i = 0; i < clientsList.size(); i++){
+        frase += clientsList.get(i);
+        frase += "\n";
+      }
+    }
+
+    return frase;
   }
 }

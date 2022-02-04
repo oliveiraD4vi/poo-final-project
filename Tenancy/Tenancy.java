@@ -16,7 +16,7 @@ import Persons.Client;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Tenancy {
+public class Tenancy implements Comparable<Tenancy> {
   private int id;
   private Date rentDate;
   private Date devolutionDate;
@@ -163,6 +163,10 @@ public class Tenancy {
    */
   public Client getClient() {
     return client;
+  }
+
+  @Override public int compareTo(Tenancy t){
+    return Integer.compare(this.id, t.getId());
   }
 
   /**

@@ -1,3 +1,12 @@
+/**
+ * A classe App representa o sistema de aluguel de veiculos, no qual é possivel
+ * alugar, adionar e remover veiculos, alem de temos acesso as informações do processo
+ * de alocação de veiculo, informações sobre os clientes, informações sobre os veiculos.
+ * Tambem é possivel modificar algumas informações disponiveis no sistema.  
+ * @author Davi Oliveira | Robson Diógenes
+ * @version 1.0 data: 28/01/2022
+ */
+
 package App;
 
 import Date.Date;
@@ -56,6 +65,12 @@ class App {
     input.close();
   }
 
+  /**
+   * O metodo tenacyMenu nos mostra o menu do objeto da classe Tenacy
+   * @param company é um objeto da classe RentalCompany
+   * @param input é um objeto da classe Scanner
+   * @param menuInput é uma variavel do tipo char que representa a opção escolhida no menu
+   */
   static void tenancyMenu(RentalCompany company, Scanner input, char menuInput) {
     do {
       System.out.println("\nVehicle Rental System - VRS");
@@ -89,6 +104,12 @@ class App {
     } while (menuInput != '0');
   }
 
+  /**
+   * O metodo companyMenu nos mostra o menu do objeto da classse RentalCompany
+   * @param company é um objeto da classe RentalCompany
+   * @param input é um objeto da classe Scanner
+   * @param menuInput é uma variavel do tipo char que representa a opção escolhida no menu
+   */
   static void companyMenu(RentalCompany company, Scanner input, char menuInput) {
     do {
       System.out.println("\nVehicle Rental System - VRS");
@@ -129,6 +150,12 @@ class App {
     } while (menuInput != '0');
   }
 
+  /**
+   * Nos mostra o menu no qual é possivel modificar algumas informações do objeto da classe RentalCompany
+   * @param company é um objeto da classe RentalCompany
+   * @param input é um objeto da classe Scanner
+   * @param menuInput é uma variavel do tipo char que representa a opção escolhida no menu
+   */
   static void editMenu(RentalCompany company, Scanner input, char menuInput) {
     do {
       System.out.println("\nVehicle Rental System - VRS");
@@ -157,6 +184,12 @@ class App {
     } while (menuInput != '0');
   }
 
+  /**
+   * O metodo addVehivle adiciona um veiculo no objeto da Classe RentalCompany
+   * @param company é objeto da classe RentalCompany 
+   * @param type é um char que identifca se o veiculo é um carro ('C') ou uma moto ('M')
+   * @param in é um objeto da classe Scanner
+   */
   static void addVehicle(RentalCompany company, char type, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
@@ -209,6 +242,12 @@ class App {
     }
   }
 
+  /**
+   * O metodo removeVehicle remove um veiculo do objeto da classe RentalCompany
+   * @param company é um objeto da classe RentalCompany 
+   * @param type é um char que identifca se o veiculo é um carro ('C') ou uma moto ('M')
+   * @param in é um objeto da classe Scanner
+   */
   static void removeVehicle(RentalCompany company, char type, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
@@ -253,6 +292,11 @@ class App {
     if (!idFound) System.out.println("fail: id not found");
   }
 
+  /**
+   * O metodo updateTenancy muda a data ou encerra um contrato
+   * @param company é um objeto da classe RentalCompany 
+   * @param in é um objeto da classe Scanner
+   */
   static void updateTenancy(RentalCompany company, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
@@ -297,6 +341,11 @@ class App {
     }
   }
 
+  /**
+   * O metodo startNewTenancy começa um novo contrato de alocação 
+   * @param company é um objeto da classe RentalCompany 
+   * @param in é um objeto da classe Scanner
+   */
   static void startNewTenancy(RentalCompany company, Scanner in) {
     System.out.println("\nVehicle Rental System - VRS");
 
@@ -390,6 +439,11 @@ class App {
     Collections.sort(company.getDisponibleMotorcycle());
   }
 
+  /**
+   * O metodo updateRentalCompany ler oo dados do arquivo RentalCompany.txt
+   * @param input é um objeto da classe Scanner
+   * @return retorna uma referencia de um objeto da classe RentalCompany
+   */
   static RentalCompany updateRentalCompany(Scanner input) {
     String tempID;
     RentalCompany company = null;
@@ -462,6 +516,10 @@ class App {
     }
   }
 
+  /**
+   * O metodo writeRentalCompany escreve dados no arquivo RentalCompany.txt
+   * @param company é um objeto da classe RentalCompany 
+   */
   static void writeRentalCompany(RentalCompany company) {
     try (
       FileWriter file = new FileWriter("txtFiles/RentalCompany.txt");
@@ -478,6 +536,11 @@ class App {
     }
   }
 
+  /**
+   * O metodo updateClientsList ler os dados do arquivo Clients.txt
+   * @param clients é um List de objetos da classe Client
+   * @return retorna true caso a leitura ocorra, false caso não
+   */
   static boolean updateClientsList(List<Client> clients) {
     String tempID;
 
@@ -508,6 +571,10 @@ class App {
     }
   }
 
+  /**
+   * O metodo writeClientsList escreve dados no arquivo Clients.txt
+   * @param clients é um List de objetos da classe Client
+   */
   static void writeClientsList(List<Client> clients) {
     try (
       FileWriter file = new FileWriter("txtFiles/Clients.txt");
@@ -528,6 +595,11 @@ class App {
     }
   }
 
+  /**
+   * O metodo updateTenanciesList ler os dados do arquivo Tenancies.txt
+   * @param company é um objeto da classe RentalCompany
+   * @return retorna true caso a leitura ocorra, false caso não
+   */
   static boolean updateTenanciesList(RentalCompany company) {
     String tempID;
 
@@ -609,6 +681,10 @@ class App {
     }
   }
 
+  /**
+   * O metodo writeTenanciesList escreve dados no arquivo Tenancies.txt
+   * @param tenancies é um List com objetos da classe Tenancy
+   */
   static void writeTenanciesList(List<Tenancy> tenancies) {
     try (
       FileWriter file = new FileWriter("txtFiles/Tenancies.txt");
@@ -644,6 +720,12 @@ class App {
     }
   }
 
+  /**
+   * O metodo updateVehiclesList ler os dados do arquivo Vehicle.txt
+   * @param cars é um List com objetos da classe Car
+   * @param motorcycles é um List com objetos da classe Motorcycle
+   * @return retorna true caso a leitura ocorra, false caso não
+   */
   static boolean updateVehiclesList(List<Car> cars, List<Motorcycle> motorcycles) {
     String tempID;
 
@@ -717,6 +799,11 @@ class App {
     }
   }
 
+  /**
+   * O metodo writeVehiclesList escreve dados no arquivo Vehicle.txt
+   * @param cars é um List com objetos da classe Car
+   * @param motorcycles é um List com objetos da classe Motorcycle
+   */
   static void writeVehiclesList(List<Car> cars, List<Motorcycle> motorcycles) {
     try (
       FileWriter file = new FileWriter("txtFiles/Vehicles.txt");

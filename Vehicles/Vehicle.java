@@ -3,11 +3,11 @@
  * genérico que pode ser um carro ou uma moto. Os atributos presentes
  * nesta classe incluem id, tipo (type), placa (plate), marca (brand),
  * modelo (model), cor (color) e preço base (basePrice), que é o preço
- * base de locação diária do veículo (este valor será alterado dependendo)
- * do tipo de veículo. O atributo alugado (rented) determina se o
+ * base de locação diária do veículo (este valor será alterado dependendo
+ * do tipo de veículo). O atributo alugado (rented) determina se o
  * veículo se encontra disponível ou não.
  * @author Davi Oliveira | Robson Diógenes
- * @version 1.0 data: 25/01/2022
+ * @version 1.0 data: 24/04/2022
  */
 
 package Vehicles;
@@ -16,11 +16,6 @@ import Labels.Brand;
 import Labels.Color;
 
 abstract public class Vehicle {
-
-  // protected enum Color {Azul, Vermelho, Preto, Branco, Cinza};
-  // protected enum Brand {Fiat, Chevrolet, Volkswagen, Renault, Hyundai, Honda};
-  // protected enum Model {Corsa, Uno, Gol}
-
   protected int id;
   protected char type; //C or M
   protected String plate;

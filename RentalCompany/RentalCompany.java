@@ -1,7 +1,7 @@
 /**
- * A classe RentalCompany reprensenta uma locadora de veiculos, na qual temos informações 
- * do tipo: gerente, endereço, clientes e veiculos disponiveis para aluguel, alem disso
- * é possivel alugar/desalugar um veiculo e mostrar as informações presente nessa clase.
+ * A classe RentalCompany representa uma locadora de veiculos, na qual temos informações 
+ * do tipo: gerente, endereço, clientes e veículos disponiveis para aluguel, além disso
+ * é possivel alugar/desalugar um veiculo e mostrar as informações presentes nesta classe.
  * @author Davi Oliveira | Robson Diógenes
  * @version 1.0 data: 04/02/2022
  */
